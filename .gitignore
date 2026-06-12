@@ -1,0 +1,58 @@
+# ==========================================
+# 1. Project Specific Data & Notebooks
+# ==========================================
+
+# Ignore the specific data file
+data/ibm_data.csv
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+.ipynb_checkpoints/
+**/ .ipynb_checkpoints/
+
+# ==========================================
+# 2. Standard Python Boilerplate
+# ==========================================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[codz]
+*$py.class
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Environments and Virtual Envs
+.env
+.envrc
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDEs and Text Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
