@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # IBM Quantum Calibration Profiling — ML Stability Classification
 
 **Status:** Research in progress · Manuscript in preparation
