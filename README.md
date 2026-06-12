@@ -171,8 +171,8 @@ All 10 figures are pre-generated in the `figures/` folder and embedded in the no
 B.Tech Computer Science & Engineering (Data Science & ML Minor)  
 Lovely Professional University, Jalandhar, India  
  
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-udaykiran1111-blue?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/uday-kiran-vattikuti)
-[![GitHub](https://img.shields.io/badge/GitHub-Udaykiran1111-black?style=flat-square&logo=github)](https://github.com/Udaykiran1111)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-udaykiran-blue?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/uday-kiran-vattikuti)
+[![GitHub](https://img.shields.io/badge/GitHub-Udaykiran-black?style=flat-square&logo=github)](https://github.com/Udaykiran1111)
  
 ---
  
