@@ -1,0 +1,22 @@
+{
+  "features": [
+    "hist_T1_mean",
+    "hist_T1_std",
+    "hist_T1_min",
+    "hist_T1_max",
+    "hist_T2_mean",
+    "hist_T2_std",
+    "hist_T2_min",
+    "hist_T2_max",
+    "hist_RE_mean",
+    "hist_RE_std",
+    "hist_RE_min",
+    "hist_RE_max",
+    "prev_T1",
+    "prev_T2",
+    "prev_RE",
+    "hist_coherence_product",
+    "hist_t2_t1_ratio"
+  ],
+  "n_features": 17
+}

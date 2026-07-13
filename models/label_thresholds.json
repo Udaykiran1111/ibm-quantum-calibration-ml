@@ -1,0 +1,9 @@
+{
+  "T1_threshold_us": 100.0,
+  "T2_threshold_us": 50.0,
+  "RE_threshold": 0.05,
+  "label_logic": "T1_us > T1_threshold AND T2_us > T2_threshold AND RE < RE_threshold",
+  "applied_to": "current_session_means",
+  "features_from": "prior_sessions_only (shift+expanding window)",
+  "leakage_status": "NONE \u2014 temporally separated"
+}

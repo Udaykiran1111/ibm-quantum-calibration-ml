@@ -1,0 +1,8 @@
+{
+  "T1_threshold_us": 100.0,
+  "T2_threshold_us": 50.0,
+  "RE_threshold": 0.05,
+  "label_logic": "T1_us > T1_threshold AND T2_us > T2_threshold AND readout_error < RE_threshold",
+  "label_source": "current_session_means",
+  "feature_source": "prior_sessions_only"
+}

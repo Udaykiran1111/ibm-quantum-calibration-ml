@@ -1,0 +1,43 @@
+{
+  "model_type": "XGBoost",
+  "version": "v2",
+  "training_file": "ibm_data.csv",
+  "training_period": "Dec 28 2025 \u2013 Jan 02 2026",
+  "training_backends": [
+    "ibm_fez",
+    "ibm_torino",
+    "ibm_marrakesh"
+  ],
+  "training_rows": 1335,
+  "n_features": 17,
+  "features": [
+    "hist_T1_mean",
+    "hist_T1_std",
+    "hist_T1_min",
+    "hist_T1_max",
+    "hist_T2_mean",
+    "hist_T2_std",
+    "hist_T2_min",
+    "hist_T2_max",
+    "hist_RE_mean",
+    "hist_RE_std",
+    "hist_RE_min",
+    "hist_RE_max",
+    "prev_T1",
+    "prev_T2",
+    "prev_RE",
+    "hist_coherence_product",
+    "hist_t2_t1_ratio"
+  ],
+  "label_thresholds": {
+    "T1_us": 100.0,
+    "T2_us": 50.0,
+    "RE": 0.05
+  },
+  "lobo_mean_auc": 0.904,
+  "lobo_min_auc": 0.8747,
+  "leakage_status": "NONE \u2014 verified by 3-test audit in Section 8",
+  "random_state": 42,
+  "requires_prior_snapshots": 1,
+  "live_layer_note": "Day 1 of collection: no predictions (no history). Day 2+: predictions available using prior day as history."
+}
