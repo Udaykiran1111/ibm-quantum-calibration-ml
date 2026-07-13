@@ -1,8 +1,8 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-from datetime import date, timedelta
 import mysql.connector
+from datetime import datetime, timedelta
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -11,32 +11,50 @@ st.set_page_config(
     layout="wide",
 )
 
-# ── Database connection using st.secrets ──────────────────────────────────────
+# ── Database connection with real error messages ──────────────────────────────
 @st.cache_resource
 def get_db_connection():
-    return mysql.connector.connect(
-        host=st.secrets["MYSQL_HOST"],
-        port=int(st.secrets["MYSQL_PORT"]),
-        user=st.secrets["MYSQL_USER"],
-        password=st.secrets["MYSQL_PASSWORD"],
-        database=st.secrets["MYSQL_DATABASE"]
-    )
+    try:
+        conn = mysql.connector.connect(
+            host=st.secrets["MYSQL_HOST"],
+            port=int(st.secrets["MYSQL_PORT"]),
+            user=st.secrets["MYSQL_USER"],
+            password=st.secrets["MYSQL_PASSWORD"],
+            database=st.secrets["MYSQL_DATABASE"],
+            connection_timeout=10
+        )
+        return conn
+    except KeyError as e:
+        st.error(f"Missing secret: {e}. Go to Streamlit Cloud → Settings → Secrets and add all 5 keys.")
+        st.stop()
+    except mysql.connector.Error as err:
+        st.error(f"MySQL Connection Error {err.errno}: {err.msg}")
+        if err.errno == 2003:
+            st.info("Check MYSQL_HOST and MYSQL_PORT in Secrets. Must match Railway Public Host.")
+        elif err.errno == 1045:
+            st.info("Access denied. Check MYSQL_USER and MYSQL_PASSWORD in Secrets.")
+        elif err.errno == 1049:
+            st.info("Database not found. Check MYSQL_DATABASE in Secrets. Should be 'railway'.")
+        st.stop()
 
 @st.cache_data(ttl=300)
 def get_latest_rankings(backend=None):
     conn = get_db_connection()
     query = """
-        SELECT r.*, c.t1_us, c.t2_us, c.readout_error
+        SELECT r.backend, r.qubit, r.viability_rank, r.viability_score, r.label, r.snapshot_date,
+               c.t1_us, c.t2_us, c.readout_error
         FROM qubit_rankings r
         JOIN qubit_calibration c ON r.backend = c.backend 
             AND r.qubit = c.qubit 
             AND r.snapshot_date = c.snapshot_date
         WHERE r.snapshot_date = (SELECT MAX(snapshot_date) FROM qubit_rankings)
     """
+    params = []
     if backend:
-        query += f" AND r.backend = '{backend}'"
+        query += " AND r.backend = %s"
+        params.append(backend)
     query += " ORDER BY r.backend, r.viability_rank"
-    df = pd.read_sql(query, conn)
+    df = pd.read_sql(query, conn, params=params if params else None)
     conn.close()
     return df
 
@@ -95,15 +113,19 @@ try:
     col3.metric("Latest Snapshot", str(stats['latest_date']))
     col4.metric("Model", "Random Forest v2")
 except Exception as e:
-    st.error(f"Database connection failed: {e}")
+    st.error(f"Failed to load summary stats: {e}")
     st.stop()
 
 st.divider()
 
 # ── Load dynamic backends from DB ─────────────────────────────────────────────
-BACKENDS = get_all_backends()
-if not BACKENDS:
-    st.warning("No rankings in database yet. Run collector.py at least once.")
+try:
+    BACKENDS = get_all_backends()
+    if not BACKENDS:
+        st.warning("No rankings in database yet. Run collector.py at least once.")
+        st.stop()
+except Exception as e:
+    st.error(f"Failed to load backends: {e}")
     st.stop()
 
 # ── Sidebar controls ──────────────────────────────────────────────────────────
@@ -158,7 +180,7 @@ with tab1:
             height=min(400, 40 + 35 * len(display))
         )
 
-# ════════════════════════════════════════════════════════════════════════════
+# ════════════════════════════════════════════
 # TAB 2 — Trend for a specific qubit
 # ════════════════════════════════════════════════════════════════════════════
 with tab2:
@@ -210,7 +232,7 @@ with tab2:
         plt.tight_layout()
         st.pyplot(fig)
 
-# ════════════════════════════════════════════
+# ════════════════════════════════════════════════════════════════════════════
 # TAB 3 — Backend Comparison with Large Trend Chart
 # ════════════════════════════════════════════════════════════════════════════
 with tab3:
@@ -280,5 +302,6 @@ with tab3:
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.divider()
 st.caption(
-    "Author: Vattikuti Uday Kiran,"
+   
+    "Author: Vattikuti Uday Kiran"
 )
