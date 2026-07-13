@@ -1,307 +1,265 @@
+"""
+dashboard.py — IBM Quantum Qubit Viability Analytics Interface
+Production dashboard reading dynamic backend calibration states from MySQL.
+"""
+
+import os
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-import mysql.connector
-from datetime import datetime, timedelta
+from datetime import date
+from dotenv import load_dotenv
 
-# ── Page config ───────────────────────────────────────────────────────────────
+load_dotenv()
+
+# -- Page Configuration ──
 st.set_page_config(
-    page_title="IBM Quantum Qubit Viability",
-    page_icon=None,
+    page_title="IBM Quantum Qubit Analytics",
     layout="wide",
 )
 
-# ── Database connection with real error messages ──────────────────────────────
+# Professional Minimal Palette
+COLOR_PRIMARY = '#1A365D'    # Deep Navy
+COLOR_SECONDARY = '#2B6CB0'  # Slate Blue
+COLOR_ACCENT = '#319795'     # Teal
+COLOR_MUTED = '#4A5568'      # Charcoal
+COLOR_CRITICAL = '#C53030'   # Deep Red
+
+# -- Database Module Integration ──
 @st.cache_resource
-def get_db_connection():
+def load_db_functions():
     try:
-        conn = mysql.connector.connect(
-            host=st.secrets["MYSQL_HOST"],
-            port=int(st.secrets["MYSQL_PORT"]),
-            user=st.secrets["MYSQL_USER"],
-            password=st.secrets["MYSQL_PASSWORD"],
-            database=st.secrets["MYSQL_DATABASE"],
-            connection_timeout=10
+        from database import (
+            get_latest_rankings, get_ranking_history,
+            get_summary_stats, get_all_dates
         )
-        return conn
-    except KeyError as e:
-        st.error(f"Missing secret: {e}. Go to Streamlit Cloud → Settings → Secrets and add all 5 keys.")
-        st.stop()
-    except mysql.connector.Error as err:
-        st.error(f"MySQL Connection Error {err.errno}: {err.msg}")
-        if err.errno == 2003:
-            st.info("Check MYSQL_HOST and MYSQL_PORT in Secrets. Must match Railway Public Host.")
-        elif err.errno == 1045:
-            st.info("Access denied. Check MYSQL_USER and MYSQL_PASSWORD in Secrets.")
-        elif err.errno == 1049:
-            st.info("Database not found. Check MYSQL_DATABASE in Secrets. Should be 'railway'.")
+        return get_latest_rankings, get_ranking_history, get_summary_stats, get_all_dates
+    except Exception as e:
+        st.error(f"Database Initialization Error: {e}")
         st.stop()
 
-@st.cache_data(ttl=300)
-def get_latest_rankings(backend=None):
-    conn = get_db_connection()
-    query = """
-        SELECT r.backend, r.qubit, r.viability_rank, r.viability_score, r.label, r.snapshot_date,
-               c.t1_us, c.t2_us, c.readout_error
-        FROM qubit_rankings r
-        JOIN qubit_calibration c ON r.backend = c.backend 
-            AND r.qubit = c.qubit 
-            AND r.snapshot_date = c.snapshot_date
-        WHERE r.snapshot_date = (SELECT MAX(snapshot_date) FROM qubit_rankings)
-    """
-    params = []
-    if backend:
-        query += " AND r.backend = %s"
-        params.append(backend)
-    query += " ORDER BY r.backend, r.viability_rank"
-    df = pd.read_sql(query, conn, params=params if params else None)
-    conn.close()
-    return df
+get_latest_rankings, get_ranking_history, get_summary_stats, get_all_dates = load_db_functions()
 
-@st.cache_data(ttl=300)
-def get_ranking_history(backend, qubit, days=7):
-    conn = get_db_connection()
-    query = """
-        SELECT r.snapshot_date, r.viability_score, r.label, 
-               c.t1_us, c.t2_us, c.readout_error
-        FROM qubit_rankings r
-        JOIN qubit_calibration c ON r.backend = c.backend 
-            AND r.qubit = c.qubit 
-            AND r.snapshot_date = c.snapshot_date
-        WHERE r.backend = %s AND r.qubit = %s
-            AND r.snapshot_date >= DATE_SUB(CURDATE(), INTERVAL %s DAY)
-        ORDER BY r.snapshot_date
-    """
-    df = pd.read_sql(query, conn, params=(backend, qubit, days))
-    conn.close()
-    return df
-
-@st.cache_data(ttl=300)
-def get_summary_stats():
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT COUNT(DISTINCT snapshot_date) as days_collected FROM qubit_rankings")
-    days = cursor.fetchone()['days_collected']
-    cursor.execute("SELECT MAX(snapshot_date) as latest_date FROM qubit_rankings")
-    latest = cursor.fetchone()['latest_date']
-    cursor.execute("SELECT COUNT(*) as qubits_latest FROM qubit_rankings WHERE snapshot_date = %s", (latest,))
-    qubits = cursor.fetchone()['qubits_latest']
-    conn.close()
-    return {'days_collected': days, 'latest_date': latest, 'qubits_latest': qubits}
-
-@st.cache_data(ttl=300)
-def get_all_backends():
-    conn = get_db_connection()
-    df = pd.read_sql("SELECT DISTINCT backend FROM qubit_rankings ORDER BY backend", conn)
-    conn.close()
-    return df['backend'].tolist()
-
-# ── Header ────────────────────────────────────────────────────────────────────
-st.title("IBM Quantum — Qubit Viability Live Dashboard")
+# -- Header Section ──
+st.title("IBM Quantum — Qubit Viability Live Analytics Engine")
 st.caption(
-    "Predictions generated by a Random Forest model (LOBO AUC 0.904) trained on "
-    "Dec 28–Jan 02 IBM Heron calibration data. Scores use historical T1/T2/RE features only — "
-    "no current-session leakage."
+    "Predictive performance modeling leveraging Random Forest v2 architecture (LOBO AUC: 0.904). "
+    "Features derived strictly from historical coherence variables to prevent current-session target leakage."
 )
 
-# ── Summary stats ─────────────────────────────────────────────────────────────
+# -- System KPI Summary ──
 try:
     stats = get_summary_stats()
     col1, col2, col3, col4 = st.columns(4)
-    col1.metric("Days Collected", stats['days_collected'])
-    col2.metric("Qubits Ranked Today", stats['qubits_latest'])
-    col3.metric("Latest Snapshot", str(stats['latest_date']))
-    col4.metric("Model", "Random Forest v2")
+    col1.metric("Historical Depth (Days)", stats['days_collected'])
+    col2.metric("Active Managed Qubits", stats['qubits_latest'])
+    col3.metric("Last Data Ingestion", str(stats['latest_date']))
+    col4.metric("Analytics Engine", "Random Forest v2")
 except Exception as e:
-    st.error(f"Failed to load summary stats: {e}")
-    st.stop()
+    st.warning(f"Metadata summary unavailable: {e}")
 
 st.divider()
 
-# ── Load dynamic backends from DB ─────────────────────────────────────────────
+# -- Dynamic Data Hydration ──
 try:
-    BACKENDS = get_all_backends()
-    if not BACKENDS:
-        st.warning("No rankings in database yet. Run collector.py at least once.")
+    # Pull global latest snapshot to dynamically extract discovered backends
+    global_latest = get_latest_rankings()
+    
+    if global_latest.empty:
+        st.warning(
+            "Data Layer Empty. Please execute collector.py to populate historical "
+            "calibration structures and initialize prediction sequences."
+        )
         st.stop()
+        
+    # Dynamically track available operational backends from DB
+    DYNAMIC_BACKENDS = sorted(global_latest['backend'].unique())
+
 except Exception as e:
-    st.error(f"Failed to load backends: {e}")
+    st.error(f"Failed to pull operational data frames: {e}")
     st.stop()
 
-# ── Sidebar controls ──────────────────────────────────────────────────────────
-st.sidebar.header("Filters")
-selected_backend = st.sidebar.selectbox("Backend", ["All"] + BACKENDS, index=0)
-top_n = st.sidebar.slider("Show top N qubits", min_value=5, max_value=50, value=20)
-show_only_viable = st.sidebar.checkbox("Show only viable qubits", value=False)
+# -- Enterprise Control Filters (Sidebar) ──
+st.sidebar.header("Analytics Scoping")
+selected_backend = st.sidebar.selectbox(
+    "Target Quantum Architecture", ["All Available Systems"] + DYNAMIC_BACKENDS, index=0
+)
+top_n = st.sidebar.slider("Rank View Limit (Top N)", min_value=5, max_value=50, value=20)
+show_only_viable = st.sidebar.checkbox("Filter: Viable Cohort Only (Label = 1)", value=False)
 
-# ── Load rankings ─────────────────────────────────────────────────────────────
-backend_filter = None if selected_backend == "All" else selected_backend
-df = get_latest_rankings(backend=backend_filter)
-
-if df.empty:
-    st.warning("No rankings in database yet. Run collector.py at least once.")
-    st.stop()
+# Apply runtime dataframe filtering
+df = global_latest.copy()
+if selected_backend != "All Available Systems":
+    df = df[df['backend'] == selected_backend]
 
 if show_only_viable:
     df = df[df['label'] == 1]
 
-# ── Tab layout ────────────────────────────────────────────────────────────────
-tab1, tab2, tab3 = st.tabs(["Rankings", "Trends", "Backend Comparison"])
+# -- Interface Tab Matrix ──
+tab1, tab2, tab3 = st.tabs(["Performance Rankings", "Coherence Trends Canvas", "Architecture Comparison"])
 
-# ════════════════════════════════════════════════════════════════════════════
-# TAB 1 — Rankings Table
-# ════════════════════════════════════════════════════════════════════════════
+# ==============================================================================
+# TAB 1 — Performance Rankings
+# ==============================================================================
 with tab1:
-    st.subheader(f"Top {top_n} Qubits by Viability Score")
-
-    for backend in (BACKENDS if selected_backend == "All" else [selected_backend]):
-        sub = df[df['backend'] == backend].nsmallest(top_n, 'viability_rank').copy()
-        if sub.empty:
+    st.subheader(f"Top {top_n} Characterized Qubits by Viability Index")
+    
+    backends_to_render = DYNAMIC_BACKENDS if selected_backend == "All Available Systems" else [selected_backend]
+    
+    for b_name in backends_to_render:
+        sub_df = df[df['backend'] == b_name].nsmallest(top_n, 'viability_rank').copy()
+        if sub_df.empty:
             continue
-
-        st.markdown(f"**{backend}**")
-
-        display = sub[['viability_rank', 'qubit', 'viability_score',
-                        't1_us', 't2_us', 'readout_error', 'label']].copy()
-        display.columns = ['Rank', 'Qubit', 'Score', 'T1 (μs)', 'T2 (μs)', 'RE', 'Viable']
-        display['Viable'] = display['Viable'].map({1: 'Yes', 0: 'No'})
-        display['Score'] = display['Score'].round(4)
-        display['T1 (μs)'] = display['T1 (μs)'].round(1)
-        display['T2 (μs)'] = display['T2 (μs)'].round(1)
-        display['RE'] = display['RE'].round(4)
-
+            
+        st.markdown(f"**System Matrix: {b_name}**")
+        
+        # Clean production column presentation
+        display_df = sub_df[['viability_rank', 'qubit', 'viability_score',
+                             'T1_us', 'T2_us', 'readout_error', 'label']].copy()
+        display_df.columns = ['Rank', 'Qubit ID', 'Viability Score', 'T1 (us)', 'T2 (us)', 'Readout Error', 'Status']
+        
+        # Map dynamic status identifiers cleanly without raw emojis
+        display_df['Status'] = display_df['Status'].map({1: 'OPERATIONAL', 0: 'DEGRADED'})
+        display_df['Viability Score'] = display_df['Viability Score'].round(4)
+        display_df['T1 (us)'] = display_df['T1 (us)'].round(2)
+        display_df['T2 (us)'] = display_df['T2 (us)'].round(2)
+        display_df['Readout Error'] = display_df['Readout Error'].round(5)
+        
         st.dataframe(
-            display.style.apply(
-                lambda row: ['background-color: #e8f5e9' if row['Viable'] == 'Yes'
-                             else 'background-color: #ffebee'] * len(row),
-                axis=1
-            ),
+            display_df.set_index('Rank'),
             use_container_width=True,
-            height=min(400, 40 + 35 * len(display))
+            height=min(450, 45 + 36 * len(display_df))
         )
 
-# ════════════════════════════════════════════
-# TAB 2 — Trend for a specific qubit
-# ════════════════════════════════════════════════════════════════════════════
+# ==============================================================================
+# TAB 2 — Coherence Trends Canvas (Expanded Architecture View)
+# ==============================================================================
 with tab2:
-    st.subheader("Viability Score Trend — Single Qubit")
-
+    st.subheader("Deep Coherence & Viability Historical Analysis")
+    
     col_a, col_b = st.columns(2)
     with col_a:
-        trend_backend = st.selectbox("Backend", BACKENDS, key="trend_backend")
+        trend_backend = st.selectbox("System Platform Selection", DYNAMIC_BACKENDS, key="sb_trend_backend")
     with col_b:
-        qubit_options = sorted(df[df['backend'] == trend_backend]['qubit'].unique())
-        trend_qubit = st.selectbox("Qubit", qubit_options, key="trend_qubit")
+        available_qubits = sorted(global_latest[global_latest['backend'] == trend_backend]['qubit'].unique())
+        trend_qubit = st.selectbox("Target Node/Qubit ID", available_qubits, key="sb_trend_qubit")
+        
+    try:
+        trend_history = get_ranking_history(trend_backend, trend_qubit)
+        
+        if trend_history.empty:
+            st.info("No tracking matrix recorded for the designated physical target.")
+        elif len(trend_history) < 2:
+            st.info("Insufficient historical span. Cross-sectional metrics require at least 2 tracking snapshots.")
+        else:
+            # Huge, Clear Diagnostic Plot
+            fig, axes = plt.subplots(4, 1, figsize=(14, 10), sharex=True)
+            fig.suptitle(f"Analytical Health Profile — {trend_backend} (Qubit {trend_qubit})", 
+                         fontsize=14, color=COLOR_PRIMARY, fontweight='bold')
+            
+            x_dates = pd.to_datetime(trend_history['snapshot_date']).dt.strftime('%b %d')
+            
+            # Subplot 1: Viability Evaluation
+            axes[0].plot(x_dates, trend_history['viability_score'], marker='s', color=COLOR_PRIMARY, linewidth=2, label='Model Score')
+            axes[0].set_ylabel('Viability Score', fontsize=10, fontweight='semibold')
+            axes[0].set_ylim(-0.05, 1.05)
+            
+            # Subplot 2: T1 Target
+            axes[1].plot(x_dates, trend_history['T1_us'], marker='o', color=COLOR_SECONDARY, linewidth=2, label='Measured T1')
+            axes[1].axhline(100.0, color=COLOR_CRITICAL, linestyle='--', linewidth=1.2, label='Min Threshold (100 us)')
+            axes[1].set_ylabel('T1 Relaxation (us)', fontsize=10, fontweight='semibold')
+            
+            # Subplot 3: T2 Target
+            axes[2].plot(x_dates, trend_history['T2_us'], marker='^', color=COLOR_ACCENT, linewidth=2, label='Measured T2')
+            axes[2].axhline(50.0, color=COLOR_CRITICAL, linestyle='--', linewidth=1.2, label='Min Threshold (50 us)')
+            axes[2].set_ylabel('T2 Dephasing (us)', fontsize=10, fontweight='semibold')
+            
+            # Subplot 4: Readout Error Target
+            axes[3].plot(x_dates, trend_history['readout_error'], marker='v', color=COLOR_MUTED, linewidth=2, label='Measured RE')
+            axes[3].axhline(0.05, color=COLOR_CRITICAL, linestyle='--', linewidth=1.2, label='Max Threshold (5% RE)')
+            axes[3].set_ylabel('Readout Error Rate', fontsize=10, fontweight='semibold')
+            
+            # Uniform grid and cleanups
+            for ax in axes:
+                ax.grid(True, linestyle=':', alpha=0.6, color='#CBD5E0')
+                ax.legend(loc='upper left', fontsize=9, framealpha=0.9)
+                ax.tick_params(labelsize=9)
+            
+            plt.xticks(rotation=0)
+            plt.tight_layout()
+            st.pyplot(fig)
+            
+    except Exception as e:
+        st.error(f"Error drawing historical tracking maps: {e}")
 
-    trend_df = get_ranking_history(trend_backend, trend_qubit, days=7)
-
-    if trend_df.empty or len(trend_df) < 2:
-        st.info("Need at least 2 days of data to show a trend. Check back tomorrow.")
-    else:
-        fig, axes = plt.subplots(2, 2, figsize=(12, 8))
-        fig.suptitle(f"{trend_backend} — Qubit {trend_qubit} History (7 Days)", fontsize=14)
-
-        dates = pd.to_datetime(trend_df['snapshot_date'])
-
-        axes[0,0].plot(dates, trend_df['viability_score'], marker='o', lw=2)
-        axes[0,0].set_title('Viability Score')
-        axes[0,0].set_ylim(0, 1)
-        axes[0,0].grid(True, alpha=0.3)
-
-        axes[0,1].plot(dates, trend_df['t1_us'], marker='o', lw=2)
-        axes[0,1].axhline(100, color='red', ls='--', lw=1, alpha=0.6, label='Threshold')
-        axes[0,1].set_title('T1 (μs)')
-        axes[0,1].legend(fontsize=8)
-        axes[0,1].grid(True, alpha=0.3)
-
-        axes[1,0].plot(dates, trend_df['t2_us'], marker='o', lw=2)
-        axes[1,0].axhline(50, color='red', ls='--', lw=1, alpha=0.6, label='Threshold')
-        axes[1,0].set_title('T2 (μs)')
-        axes[1,0].legend(fontsize=8)
-        axes[1,0].grid(True, alpha=0.3)
-
-        axes[1,1].plot(dates, trend_df['readout_error'], marker='o', lw=2)
-        axes[1,1].axhline(0.05, color='red', ls='--', lw=1, alpha=0.6, label='Threshold')
-        axes[1,1].set_title('Readout Error')
-        axes[1,1].legend(fontsize=8)
-        axes[1,1].grid(True, alpha=0.3)
-
-        for ax in axes.flat:
-            ax.tick_params(axis='x', rotation=30, labelsize=8)
-
-        plt.tight_layout()
-        st.pyplot(fig)
-
-# ════════════════════════════════════════════════════════════════════════════
-# TAB 3 — Backend Comparison with Large Trend Chart
-# ════════════════════════════════════════════════════════════════════════════
+# ==============================================================================
+# TAB 3 — Architecture Comparison
+# ==============================================================================
 with tab3:
-    st.subheader("Backend Comparison — Latest Snapshot")
-
-    all_df = get_latest_rankings()
-    summary_rows = []
-    for b in BACKENDS:
-        sub = all_df[all_df['backend'] == b]
-        if sub.empty:
+    st.subheader("Cross-Platform Calibration & Performance Distribution")
+    
+    summary_metrics = []
+    for b_system in DYNAMIC_BACKENDS:
+        sys_subset = global_latest[global_latest['backend'] == b_system]
+        if sys_subset.empty:
             continue
-        summary_rows.append({
-            'Backend': b,
-            'Qubits Ranked': len(sub),
-            'Viable (%)': f"{100*sub['label'].mean():.1f}",
-            'Mean Score': f"{sub['viability_score'].mean():.3f}",
-            'Top Qubit': int(sub.loc[sub['viability_rank'].idxmin(), 'qubit']),
-            'Top Score': f"{sub['viability_score'].max():.3f}",
-            'Mean T1 (μs)': f"{sub['t1_us'].mean():.1f}",
-            'Mean RE': f"{sub['readout_error'].mean():.4f}",
+            
+        best_idx = sys_subset['viability_rank'].idxmin()
+        
+        summary_metrics.append({
+            'System Architecture': b_system,
+            'Total Monitored Nodes': len(sys_subset),
+            'Yield Capacity (%)': f"{(sys_subset['label'].mean() * 100):.1f}%",
+            'System Mean Score': f"{sys_subset['viability_score'].mean():.3f}",
+            'Optimal Core ID': int(sys_subset.loc[best_idx, 'qubit']),
+            'Peak Core Score': f"{sys_subset['viability_score'].max():.3f}",
+            'Mean T1 (us)': f"{sys_subset['T1_us'].mean():.1f}",
+            'Mean Readout Error': f"{sys_subset['readout_error'].mean():.4f}"
         })
-    st.dataframe(pd.DataFrame(summary_rows).set_index('Backend'), use_container_width=True)
-
-    st.subheader("Score Distribution per Backend (Latest Snapshot)")
-    fig, ax = plt.subplots(figsize=(12, 5))
-    for b in BACKENDS:
-        sub = all_df[all_df['backend'] == b]
-        if sub.empty: continue
-        ax.hist(sub['viability_score'], bins=30, alpha=0.6, label=b)
-    ax.set_xlabel('Viability Score')
-    ax.set_ylabel('Qubit Count')
-    ax.legend()
-    ax.grid(True, alpha=0.3)
-    plt.tight_layout()
-    st.pyplot(fig)
-
-    st.subheader("7-Day Viability Trend — Backend Average")
-    conn = get_db_connection()
-    trend_query = """
-        SELECT backend, snapshot_date, AVG(viability_score) as mean_score
-        FROM qubit_rankings
-        WHERE snapshot_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
-        GROUP BY backend, snapshot_date
-        ORDER BY snapshot_date
-    """
-    trend_df = pd.read_sql(trend_query, conn)
-    conn.close()
-
-    if not trend_df.empty:
-        fig, ax = plt.subplots(figsize=(12, 5))
-        for b in BACKENDS:
-            sub = trend_df[trend_df['backend'] == b]
-            if sub.empty: continue
-            ax.plot(pd.to_datetime(sub['snapshot_date']), sub['mean_score'], 
-                    marker='o', lw=2, label=b)
-        ax.set_xlabel('Date')
-        ax.set_ylabel('Mean Viability Score')
-        ax.set_ylim(0, 1)
-        ax.legend()
-        ax.grid(True, alpha=0.3)
-        plt.xticks(rotation=30)
+        
+    if summary_metrics:
+        st.dataframe(
+            pd.DataFrame(summary_metrics).set_index('System Architecture'),
+            use_container_width=True
+        )
+        
+        st.write("")
+        st.markdown("**Probability Density Analysis (Latest Snapshot)**")
+        
+        # Professional Score Spread Graph
+        fig_dist, ax_dist = plt.subplots(figsize=(12, 4.5))
+        
+        for i, b_system in enumerate(DYNAMIC_BACKENDS):
+            sys_subset = global_latest[global_latest['backend'] == b_system]
+            # Use dynamic spacing for colors safely
+            color_cycle = [COLOR_PRIMARY, COLOR_SECONDARY, COLOR_ACCENT, COLOR_MUTED]
+            c = color_cycle[i % len(color_cycle)]
+            
+            ax_dist.hist(
+                sys_subset['viability_score'], 
+                bins=25, 
+                alpha=0.7, 
+                label=b_system, 
+                color=c,
+                edgecolor='white',
+                linewidth=0.5
+            )
+            
+        ax_dist.set_xlabel('Viability Calibration Score', fontsize=10)
+        ax_dist.set_ylabel('Quantum Processor Node Count', fontsize=10)
+        ax_dist.legend(loc='upper left', frameon=True)
+        ax_dist.grid(True, linestyle='--', alpha=0.4, color='#CBD5E0')
+        
         plt.tight_layout()
-        st.pyplot(fig)
+        st.pyplot(fig_dist)
     else:
-        st.info("Need at least 2 days of data to show backend trends.")
+        st.info("System distribution maps could not be compiled.")
 
-# ── Footer ────────────────────────────────────────────────────────────────────
+# -- Production Footer ──
 st.divider()
 st.caption(
-   
-    "Author: Vattikuti Uday Kiran"
+    "**Core Architecture Specs:** Random Forest Classifier Model Layer | **Training Run Optimization:** Dec 28 – Jan 02 | "
+    "**Cross-Validation Metrics:** 0.904 Mean Area Under ROC Curve | "
+    "**Data Connectivity Platform:** Dynamic System Mirror via Railway MySQL Service Instance | "
+    "**Principal Analyst:** Vattikuti Uday Kiran, LPU"
 )
