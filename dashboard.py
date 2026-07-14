@@ -14,11 +14,11 @@ st.set_page_config(
 )
 
 # Professional Minimal Palette
-COLOR_PRIMARY = '#1A365D'    # Deep Navy
-COLOR_SECONDARY = '#2B6CB0'  # Slate Blue
-COLOR_ACCENT = '#319795'     # Teal
-COLOR_MUTED = '#4A5568'      # Charcoal
-COLOR_CRITICAL = '#C53030'   # Deep Red
+COLOR_PRIMARY = "#E9E9E9"    # Deep Navy
+COLOR_SECONDARY = "#2B6CB0"  # Slate Blue
+COLOR_ACCENT = "#319795"     # Teal
+COLOR_MUTED = "#4A5568"      # Charcoal
+COLOR_CRITICAL = "#C53030"   # Deep Red
 
 # -- Database Module Integration ──
 @st.cache_resource
@@ -267,5 +267,5 @@ with tab3:
 st.divider()
 st.caption(
 
-    "**Principal Analyst:** Vattikuti Uday Kiran"
+    "**Vattikuti Uday Kiran"
 )
