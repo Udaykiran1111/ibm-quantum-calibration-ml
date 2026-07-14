@@ -6,7 +6,7 @@ data/*.csv
 *.csv
 
 # Model binary (not pushed - use git lfs if needed)
-models/*.pkl
+#models/*.pkl
 
 # Python cache
 __pycache__/
