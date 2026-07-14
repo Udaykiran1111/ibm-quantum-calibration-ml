@@ -1,8 +1,3 @@
-"""
-dashboard.py — IBM Quantum Qubit Viability Analytics Interface
-Production dashboard reading dynamic backend calibration states from MySQL.
-"""
-
 import os
 import streamlit as st
 import pandas as pd
@@ -141,11 +136,24 @@ with tab2:
     with col_a:
         trend_backend = st.selectbox("System Platform Selection", DYNAMIC_BACKENDS, key="sb_trend_backend")
     with col_b:
-        available_qubits = sorted(global_latest[global_latest['backend'] == trend_backend]['qubit'].unique())
-        trend_qubit = st.selectbox("Target Node/Qubit ID", available_qubits, key="sb_trend_qubit")
+        available_qubits = sorted(
+    int(q)
+    for q in global_latest[
+        global_latest['backend'] == trend_backend
+    ]['qubit'].unique()
+)
+
+trend_qubit = st.selectbox(
+    "Target Node/Qubit ID",
+    available_qubits,
+    key="sb_trend_qubit"
+)
         
-    try:
-        trend_history = get_ranking_history(trend_backend, trend_qubit)
+try:
+        trend_history = get_ranking_history(
+    trend_backend,
+    int(trend_qubit)
+)
         
         if trend_history.empty:
             st.info("No tracking matrix recorded for the designated physical target.")
@@ -258,8 +266,6 @@ with tab3:
 # -- Production Footer ──
 st.divider()
 st.caption(
-    "**Core Architecture Specs:** Random Forest Classifier Model Layer | **Training Run Optimization:** Dec 28 – Jan 02 | "
-    "**Cross-Validation Metrics:** 0.904 Mean Area Under ROC Curve | "
-    "**Data Connectivity Platform:** Dynamic System Mirror via Railway MySQL Service Instance | "
-    "**Principal Analyst:** Vattikuti Uday Kiran, LPU"
+
+    "**Principal Analyst:** Vattikuti Uday Kiran"
 )
