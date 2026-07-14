@@ -197,7 +197,7 @@ try:
             plt.tight_layout()
             st.pyplot(fig)
             
-    except Exception as e:
+except Exception as e:
         st.error(f"Error drawing historical tracking maps: {e}")
 
 # ==============================================================================
