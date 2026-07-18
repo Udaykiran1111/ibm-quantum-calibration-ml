@@ -12,17 +12,15 @@ from datetime import datetime
 
 # ── Connection ────────────────────────────────────────────────────────────────
 def get_connection():
-    """
-    Returns a MySQL connection using environment variables.
-    Set these in your .env file or GitHub Secrets:
-      MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE
-    """
     return mysql.connector.connect(
-        host     = os.environ.get("MYSQL_HOST"),
-        port     = int(os.environ.get("MYSQL_PORT", 3306)),
-        user     = os.environ.get("MYSQL_USER"),
-        password = os.environ.get("MYSQL_PASSWORD"),
-        database = os.environ.get("MYSQL_DATABASE"),
+        host=os.environ.get("MYSQL_HOST"),
+        port=int(os.environ.get("MYSQL_PORT",3306)),
+        user=os.environ.get("MYSQL_USER"),
+        password=os.environ.get("MYSQL_PASSWORD"),
+        database=os.environ.get("MYSQL_DATABASE"),
+
+        connection_timeout=60,
+        autocommit=False,
     )
 
 
@@ -68,7 +66,10 @@ def setup_database():
     cur.execute(CREATE_RANKINGS_TABLE)
     conn.commit()
     cur.close()
-    conn.close()
+    try:
+        conn.close()
+    except:
+        pass
     print("Database tables ready.")
 
 
@@ -94,7 +95,10 @@ def insert_calibration_rows(rows: list[dict]):
     inserted = cur.rowcount
     conn.commit()
     cur.close()
-    conn.close()
+    try:
+        conn.close()
+    except:
+        pass
     return inserted
 
 
@@ -120,26 +124,36 @@ def insert_ranking_rows(rows: list[dict]):
     inserted = cur.rowcount
     conn.commit()
     cur.close()
-    conn.close()
+    try:
+        conn.close()
+    except:
+        pass
     return inserted
 
 
 # ── Read operations ───────────────────────────────────────────────────────────
+import time   # <-- Add this at the top of database.py
+
 def get_history_for_backend(backend: str, n_days: int = 10) -> pd.DataFrame:
-    """
-    Load the last n_days of calibration history for a backend.
-    Used by collector.py to compute historical features for today's prediction.
-    """
     sql = """
         SELECT backend, qubit, snapshot_date, T1_us, T2_us, readout_error
         FROM calibration_history
         WHERE backend = %s
         ORDER BY qubit, snapshot_date
     """
-    conn = get_connection()
-    df   = pd.read_sql(sql, conn, params=(backend,))
-    conn.close()
-    return df
+
+    for attempt in range(3):
+        try:
+            conn = get_connection()
+            df = pd.read_sql(sql, conn, params=(backend,))
+            conn.close()
+            return df
+
+        except mysql.connector.Error:
+            print(f"[DB] Connection lost. Retrying ({attempt+1}/3)...")
+            time.sleep(3)
+
+    return pd.DataFrame()
 
 
 def get_latest_rankings(backend: str = None, top_n: int = None) -> pd.DataFrame:
@@ -164,7 +178,10 @@ def get_latest_rankings(backend: str = None, top_n: int = None) -> pd.DataFrame:
     """
     conn = get_connection()
     df   = pd.read_sql(sql, conn, params=params if params else None)
-    conn.close()
+    try:
+        conn.close()
+    except:
+        pass
     return df
 
 
@@ -179,7 +196,10 @@ def get_ranking_history(backend: str, qubit: int) -> pd.DataFrame:
     """
     conn = get_connection()
     df   = pd.read_sql(sql, conn, params=(backend, qubit))
-    conn.close()
+    try:
+        conn.close()
+    except:
+        pass
     return df
 
 
@@ -191,7 +211,10 @@ def get_all_dates() -> list:
     cur.execute(sql)
     dates = [r[0] for r in cur.fetchall()]
     cur.close()
-    conn.close()
+    try:
+        conn.close()
+    except:
+        pass
     return dates
 
 
@@ -207,5 +230,8 @@ def get_summary_stats() -> dict:
     row = cur.fetchone()
     latest = row['snapshot_date'] if row else None
     cur.close()
-    conn.close()
+    try:
+        conn.close()
+    except:
+        pass
     return {'days_collected': days, 'qubits_latest': total, 'latest_date': latest}
