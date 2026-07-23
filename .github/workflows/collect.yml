@@ -2,8 +2,7 @@ name: Daily Qubit Collection
 
 on:
   schedule:
-    # Runs every day at 6:00 AM UTC
-    # IBM calibrates overnight so 6AM UTC = fresh data
+    # 6 AM UTC daily
     - cron: '0 6 * * *'
 
   # Allow manual trigger from GitHub Actions tab
@@ -23,10 +22,37 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Cache pip packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
       - name: Install dependencies
         run: |
-          pip install --upgrade pip
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
+
+      - name: Verify environment
+        env:
+          IBM_QUANTUM_TOKEN: ${{ secrets.IBM_QUANTUM_TOKEN }}
+          MYSQL_HOST:        ${{ secrets.MYSQL_HOST }}
+          MYSQL_PORT:        ${{ secrets.MYSQL_PORT }}
+          MYSQL_USER:        ${{ secrets.MYSQL_USER }}
+          MYSQL_PASSWORD:    ${{ secrets.MYSQL_PASSWORD }}
+          MYSQL_DATABASE:    ${{ secrets.MYSQL_DATABASE }}
+        run: |
+          python - << 'EOF'
+          import os, sys
+          required = ['IBM_QUANTUM_TOKEN','MYSQL_HOST','MYSQL_PORT','MYSQL_USER','MYSQL_PASSWORD','MYSQL_DATABASE']
+          missing = [k for k in required if not os.environ.get(k)]
+          if missing:
+              print(f'MISSING SECRETS: {missing}')
+              sys.exit(1)
+          print('All secrets present')
+          EOF
 
       - name: Run collector
         env:
@@ -39,9 +65,42 @@ jobs:
         run: |
           python collector.py
 
+      - name: Verify data was written
+        env:
+          MYSQL_HOST:     ${{ secrets.MYSQL_HOST }}
+          MYSQL_PORT:     ${{ secrets.MYSQL_PORT }}
+          MYSQL_USER:     ${{ secrets.MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+        run: |
+          python - << 'EOF'
+          import os, sys, mysql.connector
+          from datetime import date
+          conn = mysql.connector.connect(
+              host=os.environ['MYSQL_HOST'],
+              port=int(os.environ['MYSQL_PORT']),
+              user=os.environ['MYSQL_USER'],
+              password=os.environ['MYSQL_PASSWORD'],
+              database=os.environ['MYSQL_DATABASE']
+          )
+          cur = conn.cursor()
+          cur.execute(
+              'SELECT COUNT(*) FROM calibration_history WHERE snapshot_date = %s',
+              (str(date.today()),)
+          )
+          count = cur.fetchone()[0]
+          conn.close()
+          print(f'Rows written today: {count}')
+          if count == 0:
+              print('ERROR: No data written today')
+              sys.exit(1)
+          print('Data verification passed')
+          EOF
+
       - name: Upload logs on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: collector-logs
+          name: collector-logs-${{ github.run_id }}
           path: '*.log'
+          retention-days: 7
