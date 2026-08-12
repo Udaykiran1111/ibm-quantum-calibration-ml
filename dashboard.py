@@ -285,7 +285,7 @@ with tab2:
                         numeric["model_b"],
                         numeric["model_c"],
                     ],
-                    labels=["Model A", "Model B", "Model C"],
+                    tick_labels=["Model A", "Model B", "Model C"],
                 )
                 ax.set_ylabel("Viability Probability")
                 ax.set_ylim(0, 1)

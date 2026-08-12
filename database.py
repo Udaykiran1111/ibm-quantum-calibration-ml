@@ -505,7 +505,7 @@ def get_model_data_coverage():
             MIN(snapshot_date) AS first_date,
             MAX(snapshot_date) AS last_date,
             COUNT(DISTINCT snapshot_date) AS days,
-            COUNT(*) AS rows
+            COUNT(*) AS row_count
         FROM qubit_rankings
         GROUP BY model_name
         ORDER BY model_name
