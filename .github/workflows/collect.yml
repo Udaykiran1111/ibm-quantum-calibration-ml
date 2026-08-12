@@ -2,105 +2,227 @@ name: Daily Qubit Collection
 
 on:
   schedule:
-    # 6 AM UTC daily
-    - cron: '0 6 * * *'
+    # 6 AM UTC daily = 11:30 AM IST
+    - cron: "0 6 * * *"
 
   # Allow manual trigger from GitHub Actions tab
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   collect:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
+
+    env:
+      IBM_QUANTUM_TOKEN: ${{ secrets.IBM_QUANTUM_TOKEN }}
+      MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
+      MYSQL_PORT: ${{ secrets.MYSQL_PORT }}
+      MYSQL_USER: ${{ secrets.MYSQL_USER }}
+      MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+      MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
 
     steps:
+
+      # ---------------------------------------------------------
+      # 1. Checkout
+      # ---------------------------------------------------------
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # ---------------------------------------------------------
+      # 2. Python
+      # ---------------------------------------------------------
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
+          cache: pip
 
-      - name: Cache pip packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
+      # ---------------------------------------------------------
+      # 3. Dependencies
+      # ---------------------------------------------------------
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      # ---------------------------------------------------------
+      # 4. Verify secrets
+      # ---------------------------------------------------------
       - name: Verify environment
-        env:
-          IBM_QUANTUM_TOKEN: ${{ secrets.IBM_QUANTUM_TOKEN }}
-          MYSQL_HOST:        ${{ secrets.MYSQL_HOST }}
-          MYSQL_PORT:        ${{ secrets.MYSQL_PORT }}
-          MYSQL_USER:        ${{ secrets.MYSQL_USER }}
-          MYSQL_PASSWORD:    ${{ secrets.MYSQL_PASSWORD }}
-          MYSQL_DATABASE:    ${{ secrets.MYSQL_DATABASE }}
+        shell: bash
         run: |
-          python - << 'EOF'
-          import os, sys
-          required = ['IBM_QUANTUM_TOKEN','MYSQL_HOST','MYSQL_PORT','MYSQL_USER','MYSQL_PASSWORD','MYSQL_DATABASE']
-          missing = [k for k in required if not os.environ.get(k)]
-          if missing:
-              print(f'MISSING SECRETS: {missing}')
-              sys.exit(1)
-          print('All secrets present')
-          EOF
+          python - << 'PY'
+          import os
+          import sys
 
+          required = [
+              "IBM_QUANTUM_TOKEN",
+              "MYSQL_HOST",
+              "MYSQL_PORT",
+              "MYSQL_USER",
+              "MYSQL_PASSWORD",
+              "MYSQL_DATABASE",
+          ]
+
+          missing = [
+              key for key in required
+              if not os.environ.get(key)
+          ]
+
+          if missing:
+              print(f"MISSING SECRETS: {missing}")
+              sys.exit(1)
+
+          print("All required secrets are present.")
+          PY
+
+      # ---------------------------------------------------------
+      # 5. Verify production models
+      # ---------------------------------------------------------
+      - name: Verify production models
+        shell: bash
+        run: |
+          echo "Checking production model files..."
+
+          test -f models/qubit_model_v2.pkl || {
+            echo "ERROR: Model A missing"
+            exit 1
+          }
+
+          test -f models/model_b_7day.pkl || {
+            echo "ERROR: Model B missing"
+            exit 1
+          }
+
+          test -f models/model_c_30day.pkl || {
+            echo "ERROR: Model C missing"
+            exit 1
+          }
+
+          echo "All three production models are present."
+
+          ls -lh \
+            models/qubit_model_v2.pkl \
+            models/model_b_7day.pkl \
+            models/model_c_30day.pkl
+
+      # ---------------------------------------------------------
+      # 6. Run collector
+      # ---------------------------------------------------------
       - name: Run collector
-        env:
-          IBM_QUANTUM_TOKEN: ${{ secrets.IBM_QUANTUM_TOKEN }}
-          MYSQL_HOST:        ${{ secrets.MYSQL_HOST }}
-          MYSQL_PORT:        ${{ secrets.MYSQL_PORT }}
-          MYSQL_USER:        ${{ secrets.MYSQL_USER }}
-          MYSQL_PASSWORD:    ${{ secrets.MYSQL_PASSWORD }}
-          MYSQL_DATABASE:    ${{ secrets.MYSQL_DATABASE }}
         run: |
           python collector.py
 
-      - name: Verify data was written
-        env:
-          MYSQL_HOST:     ${{ secrets.MYSQL_HOST }}
-          MYSQL_PORT:     ${{ secrets.MYSQL_PORT }}
-          MYSQL_USER:     ${{ secrets.MYSQL_USER }}
-          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+      # ---------------------------------------------------------
+      # 7. Verify calibration data was written
+      # ---------------------------------------------------------
+      - name: Verify calibration data
+        shell: bash
         run: |
-          python - << 'EOF'
-          import os, sys, mysql.connector
+          python - << 'PY'
+          import os
+          import sys
+          import mysql.connector
           from datetime import date
-          conn = mysql.connector.connect(
-              host=os.environ['MYSQL_HOST'],
-              port=int(os.environ['MYSQL_PORT']),
-              user=os.environ['MYSQL_USER'],
-              password=os.environ['MYSQL_PASSWORD'],
-              database=os.environ['MYSQL_DATABASE']
-          )
-          cur = conn.cursor()
-          cur.execute(
-              'SELECT COUNT(*) FROM calibration_history WHERE snapshot_date = %s',
-              (str(date.today()),)
-          )
-          count = cur.fetchone()[0]
-          conn.close()
-          print(f'Rows written today: {count}')
-          if count == 0:
-              print('ERROR: No data written today')
-              sys.exit(1)
-          print('Data verification passed')
-          EOF
 
+          conn = mysql.connector.connect(
+              host=os.environ["MYSQL_HOST"],
+              port=int(os.environ["MYSQL_PORT"]),
+              user=os.environ["MYSQL_USER"],
+              password=os.environ["MYSQL_PASSWORD"],
+              database=os.environ["MYSQL_DATABASE"],
+              connection_timeout=30,
+          )
+
+          cur = conn.cursor()
+
+          today = str(date.today())
+
+          cur.execute(
+              """
+              SELECT COUNT(*)
+              FROM calibration_history
+              WHERE snapshot_date = %s
+              """,
+              (today,)
+          )
+
+          calibration_count = cur.fetchone()[0]
+
+          cur.execute(
+              """
+              SELECT COUNT(DISTINCT model_name)
+              FROM qubit_rankings
+              WHERE snapshot_date = %s
+              """,
+              (today,)
+          )
+
+          model_count = cur.fetchone()[0]
+
+          cur.execute(
+              """
+              SELECT COUNT(*)
+              FROM qubit_rankings
+              WHERE snapshot_date = %s
+              """,
+              (today,)
+          )
+
+          ranking_count = cur.fetchone()[0]
+
+          cur.close()
+          conn.close()
+
+          print(f"Calibration rows today : {calibration_count}")
+          print(f"Ranking rows today     : {ranking_count}")
+          print(f"Models producing ranks : {model_count}")
+
+          if calibration_count == 0:
+              print("ERROR: No calibration data was written.")
+              sys.exit(1)
+
+          if model_count < 3:
+              print(
+                  "ERROR: Expected rankings from all 3 models, "
+                  f"but only {model_count} models wrote data."
+              )
+              sys.exit(1)
+
+          if ranking_count == 0:
+              print("ERROR: No ranking data was written.")
+              sys.exit(1)
+
+          print("Database verification passed.")
+          PY
+
+      # ---------------------------------------------------------
+      # 8. Failure diagnostics
+      # ---------------------------------------------------------
       - name: Upload logs on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: collector-logs-${{ github.run_id }}
-          path: '*.log'
+          path: |
+            *.log
+            logs/**
+          if-no-files-found: ignore
           retention-days: 7
+
+      # ---------------------------------------------------------
+      # 9. Final status
+      # ---------------------------------------------------------
+      - name: Collection completed
+        if: success()
+        run: |
+          echo "=========================================="
+          echo "IBM QUANTUM COLLECTION SUCCESSFUL"
+          echo "=========================================="
+          echo "Date: $(date -u)"
+          echo "Models: A + B + C"
+          echo "Database verification: PASSED"

@@ -1,331 +1,464 @@
 """
-collector.py — Daily IBM Quantum Calibration Collector + Predictor
+collector.py — Final three-model live IBM Quantum collector.
 
-What this script does every time it runs:
-    1. Connect to IBM Quantum and auto-discover available operational backends
-    2. Fetch today's calibration for all backends
-    3. Deduplicate to session level (one row per backend, qubit)
-    4. Save raw calibration to MySQL (calibration_history table)
-    5. Load historical data from MySQL to compute 17 historical features
-    6. Run qubit_model_v2.pkl to score each qubit's viability
-    7. Rank qubits per backend by viability score
-    8. Save rankings to MySQL (qubit_rankings table)
+Model A: XGBoost historical baseline
+Model B: Random Forest, Jul 13-Jul 19 training
+Model C: Random Forest, Jul 13-Aug 11 training
 
-Run manually: python collector.py
-Run via cron: GitHub Actions fires this at 6AM UTC daily
+CRITICAL INFERENCE RULE:
+    Today's calibration is NEVER part of today's historical features.
+
+Order:
+    1. Fetch today's calibration.
+    2. Load DB history strictly before today.
+    3. Build the same 17 historical features used in training.
+    4. Score today's qubits through A/B/C.
+    5. Save A/B/C rankings.
+    6. Save today's raw calibration.
+
+This makes the live pipeline causal and prevents current-session leakage.
 """
 
 import os
 import sys
 import pickle
 import warnings
-warnings.filterwarnings('ignore')
+from datetime import datetime, date
+
+warnings.filterwarnings("ignore")
 
 import numpy as np
 import pandas as pd
-from datetime import datetime, date
 from dotenv import load_dotenv
 
-# Load environment variables from.env (local) or GitHub Secrets (CI)
 load_dotenv()
 
-# ── Paths ─────────────────────────────────────────────────────────────────────
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = os.path.join(SCRIPT_DIR, "models", "qubit_model_v2.pkl")
+MODELS_DIR = os.path.join(SCRIPT_DIR, "models")
 
-# ── Label thresholds (must match training notebook exactly) ───────────────────
-T1_THRESH = 100.0 # microseconds
-T2_THRESH = 50.0 # microseconds
-RE_THRESH = 0.05 # 5%
+T1_THRESH = 100.0
+T2_THRESH = 50.0
+RE_THRESH = 0.05
 
-# ── Feature list (must match training notebook exactly) ───────────────────────
 HIST_FEATURES = [
-    'hist_T1_mean', 'hist_T1_std', 'hist_T1_min', 'hist_T1_max',
-    'hist_T2_mean', 'hist_T2_std', 'hist_T2_min', 'hist_T2_max',
-    'hist_RE_mean', 'hist_RE_std', 'hist_RE_min', 'hist_RE_max',
-    'prev_T1', 'prev_T2', 'prev_RE',
-    'hist_coherence_product', 'hist_t2_t1_ratio'
+    "hist_T1_mean", "hist_T1_std", "hist_T1_min", "hist_T1_max",
+    "hist_T2_mean", "hist_T2_std", "hist_T2_min", "hist_T2_max",
+    "hist_RE_mean", "hist_RE_std", "hist_RE_min", "hist_RE_max",
+    "prev_T1", "prev_T2", "prev_RE",
+    "hist_coherence_product", "hist_t2_t1_ratio",
+]
+
+MODEL_REGISTRY = [
+    {
+        "model_name": "model_a",
+        "file": "qubit_model_v2.pkl",
+        "label": "Model A — Historical (Dec28-Jan02)",
+        "algorithm": "XGBoost",
+        "required": True,
+    },
+    {
+        "model_name": "model_b",
+        "file": "model_b_7day.pkl",
+        "label": "Model B — 7-Day (Jul13-Jul19)",
+        "algorithm": "Random Forest",
+        "required": True,
+    },
+    {
+        "model_name": "model_c",
+        "file": "model_c_30day.pkl",
+        "label": "Model C — 30-Day (Jul13-Aug11)",
+        "algorithm": "Random Forest",
+        "required": True,
+    },
 ]
 
 
-# ── Step 1: Fetch calibration from IBM Quantum API ────────────────────────────
-def fetch_calibration(token: str) -> pd.DataFrame:
-    """
-    Connect to IBM Quantum and auto-discover operational backends.
-    Returns a session-level DataFrame: one row per (backend, qubit).
-    """
+def load_models():
+    loaded = []
+    for entry in MODEL_REGISTRY:
+        path = os.path.join(MODELS_DIR, entry["file"])
+        if not os.path.exists(path):
+            if entry["required"]:
+                raise FileNotFoundError(
+                    f"Required model missing: {path}"
+                )
+            continue
+
+        with open(path, "rb") as f:
+            model = pickle.load(f)
+
+        loaded.append({**entry, "model": model})
+        print(
+            f"  Loaded {entry['model_name']}: "
+            f"{entry['file']} [{entry['algorithm']}]"
+        )
+
+    if len(loaded) != 3:
+        raise RuntimeError(
+            f"Expected all 3 models, loaded {len(loaded)}."
+        )
+
+    return loaded
+
+
+def fetch_calibration(token):
     try:
         from qiskit_ibm_runtime import QiskitRuntimeService
     except ImportError:
-        print("ERROR: qiskit-ibm-runtime not installed.")
-        print("Run: pip install qiskit-ibm-runtime")
-        sys.exit(1)
+        raise RuntimeError(
+            "qiskit-ibm-runtime is not installed."
+        )
 
-    print(f"[{datetime.now().strftime('%H:%M:%S')}] Connecting to IBM Quantum...")
-    service = QiskitRuntimeService(channel="ibm_quantum_platform", token=token)
+    print(
+        f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] "
+        "Connecting to IBM Quantum..."
+    )
 
-    print(" Discovering available backends...")
-    all_backends = service.backends(simulator=False, operational=True)
-    
-    if not all_backends:
-        print("ERROR: No operational backends found for your account.")
-        sys.exit(1)
-    
-    backend_names = [b.name for b in all_backends]
-    print(f" Found {len(backend_names)} operational backends: {', '.join(backend_names)}")
+    service = QiskitRuntimeService(
+        channel="ibm_quantum_platform",
+        token=token,
+    )
+
+    backends = service.backends(
+        simulator=False,
+        operational=True,
+    )
+
+    if not backends:
+        raise RuntimeError("No operational IBM Quantum backends found.")
+
+    print(
+        f"  Discovered {len(backends)} operational backends: "
+        + ", ".join(b.name for b in backends)
+    )
 
     rows = []
-    for backend in all_backends:
-        backend_name = backend.name
-        print(f" Fetching {backend_name}...")
+
+    for backend in backends:
+        bname = backend.name
+        print(f"  Fetching {bname}...")
+
         try:
             props = backend.properties()
             if props is None:
-                print(f" WARNING: {backend_name} has no calibration data. Skipping.")
+                print(f"    No calibration data; skipping {bname}.")
                 continue
             backend_ts = props.last_update_date
-        except Exception as e:
-            print(f" WARNING: Could not fetch {backend_name}: {e}")
+        except Exception as exc:
+            print(f"    Could not fetch {bname}: {exc}")
             continue
 
-        for qubit_idx, qubit_props in enumerate(props.qubits):
-            prop_dict = {p.name: p.value for p in qubit_props}
-            T1 = prop_dict.get('T1', None)
-            T2 = prop_dict.get('T2', None)
-            RE = prop_dict.get('readout_error', None)
+        for qubit, qprops in enumerate(props.qubits):
+            values = {p.name: p.value for p in qprops}
 
-            if T1 is None or T2 is None or RE is None:
+            t1 = values.get("T1")
+            t2 = values.get("T2")
+            re = values.get("readout_error")
+
+            if t1 is None or t2 is None or re is None:
                 continue
 
-            # DEBUG: Uncomment to check units
-            # if qubit_idx == 0:
-            #     print(f"    DEBUG {backend_name} Q0: T1={T1}, T2={T2}, RE={RE}")
-
-            rows.append({
-                'backend': backend_name,
-                'qubit': qubit_idx,
-                'snapshot_date': date.today(),
-                'backend_ts': backend_ts,
-                'T1_us': T1,   # IBM API now returns microseconds directly
-                'T2_us': T2,   # IBM API now returns microseconds directly
-                'readout_error': RE,
-            })
+            rows.append(
+                {
+                    "backend": bname,
+                    "qubit": int(qubit),
+                    "snapshot_date": date.today(),
+                    "backend_ts": backend_ts,
+                    "T1_us": float(t1),
+                    "T2_us": float(t2),
+                    "readout_error": float(re),
+                }
+            )
 
     if not rows:
-        print("ERROR: No calibration data fetched from any backend.")
-        sys.exit(1)
+        raise RuntimeError("No usable calibration observations were fetched.")
 
     df = pd.DataFrame(rows)
-    print(f" Fetched {len(df)} qubit observations across {df['backend'].nunique()} backends.")
+
+    mean_t1 = df["T1_us"].mean()
+    print(
+        f"  Fetched {len(df):,} rows across "
+        f"{df['backend'].nunique()} backends."
+    )
+    print(f"  T1 mean = {mean_t1:.1f} us")
+
+    if mean_t1 > 10000:
+        raise RuntimeError(
+            "T1 unit sanity check failed. Mean T1 is > 10,000 us."
+        )
+
+    # Enforce one row per backend/qubit/date before DB insertion.
+    df = (
+        df.sort_values(["backend", "qubit", "backend_ts"])
+        .drop_duplicates(
+            subset=["backend", "qubit", "snapshot_date"],
+            keep="last",
+        )
+        .reset_index(drop=True)
+    )
+
     return df
 
 
-# ── Step 2: Compute historical features from MySQL history ────────────────────
-def compute_features(today_df: pd.DataFrame, history_df: pd.DataFrame) -> pd.DataFrame:
+def compute_features(today_df, history_df, prediction_date):
     """
-    Build 17 historical features for today's qubits using stored history.
+    Build exactly the 17 historical features.
 
-    Design:
-        - today_df = current calibration (T1_us, T2_us, readout_error per qubit)
-        - history_df = all prior days from MySQL (calibration_history table)
-
-    Features are computed from history ONLY — today's values are the prediction target.
-    This is the same design as the training notebook (no leakage).
-
-    If a qubit has no history (Day 1), features are NaN → no prediction made.
-    From Day 2 onward, all qubits get predictions.
+    history_df MUST contain only dates < prediction_date.
+    The assertion below makes that invariant executable.
     """
-    all_rows = []
+    if not history_df.empty:
+        history_df = history_df.copy()
+        history_df["snapshot_date"] = pd.to_datetime(
+            history_df["snapshot_date"]
+        ).dt.date
 
-    for backend in today_df['backend'].unique():
-        today_b = today_df[today_df['backend'] == backend].copy()
-        hist_b = history_df[history_df['backend'] == backend].copy() if not history_df.empty else pd.DataFrame()
+        bad = history_df[
+            history_df["snapshot_date"] >= prediction_date
+        ]
+        if not bad.empty:
+            raise RuntimeError(
+                "LEAKAGE GUARD FAILED: history contains current/future date."
+            )
 
-        if hist_b.empty:
-            print(f" {backend}: No history in DB yet — Day 1. Predictions skipped.")
-            # Still save calibration but skip scoring
-            today_b['can_predict'] = False
-            for col in HIST_FEATURES:
-                today_b[col] = np.nan
-            all_rows.append(today_b)
-            continue
+    rows = []
 
-        # Sort history by date
-        hist_b = hist_b.sort_values(['qubit', 'snapshot_date'])
+    for backend in sorted(today_df["backend"].unique()):
+        today_b = today_df[
+            today_df["backend"] == backend
+        ].copy()
 
-        # For each qubit, compute rolling stats from all prior observations
-        feat_rows = []
-        for qubit in today_b['qubit'].unique():
-            q_hist = hist_b[hist_b['qubit'] == qubit].sort_values('snapshot_date')
-            q_today = today_b[today_b['qubit'] == qubit].iloc[0].to_dict()
+        hist_b = (
+            history_df[
+                history_df["backend"] == backend
+            ].copy()
+            if not history_df.empty
+            else pd.DataFrame()
+        )
 
-            if len(q_hist) == 0:
-                # No history for this qubit
-                for col in HIST_FEATURES:
-                    q_today[col] = np.nan
-                q_today['can_predict'] = False
-            else:
-                t1_hist = q_hist['T1_us'].values
-                t2_hist = q_hist['T2_us'].values
-                re_hist = q_hist['readout_error'].values
+        for _, current in today_b.iterrows():
+            q = int(current["qubit"])
 
-                q_today['hist_T1_mean'] = np.mean(t1_hist)
-                q_today['hist_T1_std'] = np.std(t1_hist) if len(t1_hist) > 1 else 0.0
-                q_today['hist_T1_min'] = np.min(t1_hist)
-                q_today['hist_T1_max'] = np.max(t1_hist)
+            q_hist = (
+                hist_b[hist_b["qubit"] == q]
+                .sort_values("snapshot_date")
+            )
 
-                q_today['hist_T2_mean'] = np.mean(t2_hist)
-                q_today['hist_T2_std'] = np.std(t2_hist) if len(t2_hist) > 1 else 0.0
-                q_today['hist_T2_min'] = np.min(t2_hist)
-                q_today['hist_T2_max'] = np.max(t2_hist)
+            row = current.to_dict()
 
-                q_today['hist_RE_mean'] = np.mean(re_hist)
-                q_today['hist_RE_std'] = np.std(re_hist) if len(re_hist) > 1 else 0.0
-                q_today['hist_RE_min'] = np.min(re_hist)
-                q_today['hist_RE_max'] = np.max(re_hist)
+            if q_hist.empty:
+                row["can_predict"] = False
+                for feature in HIST_FEATURES:
+                    row[feature] = np.nan
+                rows.append(row)
+                continue
 
-                # Previous snapshot (most recent historical value)
-                q_today['prev_T1'] = t1_hist[-1]
-                q_today['prev_T2'] = t2_hist[-1]
-                q_today['prev_RE'] = re_hist[-1]
+            t1 = q_hist["T1_us"].to_numpy(dtype=float)
+            t2 = q_hist["T2_us"].to_numpy(dtype=float)
+            re = q_hist["readout_error"].to_numpy(dtype=float)
 
-                # Engineered features
-                q_today['hist_coherence_product'] = q_today['hist_T1_mean'] * q_today['hist_T2_mean']
-                q_today['hist_t2_t1_ratio'] = q_today['hist_T2_mean'] / (q_today['hist_T1_mean'] + 1e-9)
+            row["hist_T1_mean"] = np.mean(t1)
+            row["hist_T1_std"] = np.std(t1) if len(t1) > 1 else 0.0
+            row["hist_T1_min"] = np.min(t1)
+            row["hist_T1_max"] = np.max(t1)
 
-                q_today['can_predict'] = True
+            row["hist_T2_mean"] = np.mean(t2)
+            row["hist_T2_std"] = np.std(t2) if len(t2) > 1 else 0.0
+            row["hist_T2_min"] = np.min(t2)
+            row["hist_T2_max"] = np.max(t2)
 
-            feat_rows.append(q_today)
+            row["hist_RE_mean"] = np.mean(re)
+            row["hist_RE_std"] = np.std(re) if len(re) > 1 else 0.0
+            row["hist_RE_min"] = np.min(re)
+            row["hist_RE_max"] = np.max(re)
 
-        all_rows.append(pd.DataFrame(feat_rows))
+            row["prev_T1"] = t1[-1]
+            row["prev_T2"] = t2[-1]
+            row["prev_RE"] = re[-1]
 
-    return pd.concat(all_rows, ignore_index=True)
+            row["hist_coherence_product"] = (
+                row["hist_T1_mean"] * row["hist_T2_mean"]
+            )
+            row["hist_t2_t1_ratio"] = (
+                row["hist_T2_mean"]
+                / (row["hist_T1_mean"] + 1e-9)
+            )
+
+            row["can_predict"] = True
+            rows.append(row)
+
+    return pd.DataFrame(rows)
 
 
-# ── Step 3: Score and rank qubits ─────────────────────────────────────────────
-def score_qubits(feat_df: pd.DataFrame, model) -> pd.DataFrame:
-    """
-    Run the trained Random Forest model to score each qubit.
-    Computes physics-grounded label and viability rank per backend.
-    """
-    predictable = feat_df[feat_df['can_predict'] == True].copy()
+def score_with_model(feat_df, model):
+    predictable = feat_df[
+        feat_df["can_predict"] == True
+    ].copy()
 
     if predictable.empty:
-        print(" No qubits have enough history for prediction yet (Day 1).")
         return pd.DataFrame()
 
-    # Compute label from CURRENT session values
-    predictable['label'] = (
-        (predictable['T1_us'] > T1_THRESH) &
-        (predictable['T2_us'] > T2_THRESH) &
-        (predictable['readout_error'] < RE_THRESH)
+    # Current-session label is stored only as the observed outcome.
+    # It is NEVER supplied to the model.
+    predictable["label"] = (
+        (predictable["T1_us"] > T1_THRESH)
+        & (predictable["T2_us"] > T2_THRESH)
+        & (predictable["readout_error"] < RE_THRESH)
     ).astype(int)
 
-    # Score
-    X = predictable[HIST_FEATURES].fillna(0)
-    predictable['viability_score'] = model.predict_proba(X)[:, 1]
+    X = predictable[HIST_FEATURES]
 
-    # Rank within backend (1 = best)
-    predictable['viability_rank'] = predictable.groupby('backend')['viability_score'].rank(
-        ascending=False, method='min'
-    ).astype(int)
+    if X.isna().any().any():
+        raise RuntimeError(
+            "NaN historical features reached prediction stage."
+        )
+
+    predictable["viability_score"] = model.predict_proba(X)[:, 1]
+
+    predictable["viability_rank"] = (
+        predictable.groupby("backend")["viability_score"]
+        .rank(ascending=False, method="min")
+        .astype(int)
+    )
 
     return predictable
 
 
-# ── Main ──────────────────────────────────────────────────────────────────────
 def main():
     from database import (
-        setup_database, insert_calibration_rows,
-        insert_ranking_rows, get_history_for_backend
+        setup_database,
+        insert_calibration_rows,
+        insert_ranking_rows,
+        get_history_for_backend,
     )
 
-    print("=" * 60)
-    print(f"IBM QUANTUM COLLECTOR — {date.today()}")
-    print("=" * 60)
+    print("=" * 72)
+    print(f"QUBITTELEMETRY FINAL COLLECTOR — {date.today()}")
+    print("=" * 72)
 
-    # ── Check token ───────────────────────────────────────────────────────────
     token = os.environ.get("IBM_QUANTUM_TOKEN")
     if not token:
-        print("ERROR: IBM_QUANTUM_TOKEN not set.")
-        print("Add it to your.env file: IBM_QUANTUM_TOKEN=your_token_here")
-        sys.exit(1)
+        raise RuntimeError("IBM_QUANTUM_TOKEN is not set.")
 
-    # ── Load model ────────────────────────────────────────────────────────────
-    if not os.path.exists(MODEL_PATH):
-        print(f"ERROR: Model not found at {MODEL_PATH}")
-        print("Copy qubit_model_v2.pkl to the models/ folder.")
-        sys.exit(1)
-
-    with open(MODEL_PATH, 'rb') as f:
-        model = pickle.load(f)
-    print(f"Model loaded: {MODEL_PATH}")
-
-    # ── Setup DB ──────────────────────────────────────────────────────────────
+    models = load_models()
     setup_database()
 
-    # ── Fetch calibration ─────────────────────────────────────────────────────
+    # ------------------------------------------------------------
+    # 1. Fetch today's observations.
+    # ------------------------------------------------------------
+    today = date.today()
     today_df = fetch_calibration(token)
 
-    # ── Save raw calibration to DB ────────────────────────────────────────────
-    calib_rows = today_df.to_dict('records')
-    inserted = insert_calibration_rows(calib_rows)
-    print(f"[DB] Calibration rows inserted: {inserted}")
+    if today_df["snapshot_date"].nunique() != 1:
+        raise RuntimeError("Fetched data contains multiple snapshot dates.")
 
-    # ── Load history from DB ──────────────────────────────────────────────────
+    # ------------------------------------------------------------
+    # 2. IMPORTANT: load history BEFORE inserting today's rows.
+    #    Also enforce date < today in the DB query.
+    # ------------------------------------------------------------
     hist_frames = []
-    for backend in today_df['backend'].unique(): # Use discovered backends
-        h = get_history_for_backend(backend)
-        if not h.empty:
-            hist_frames.append(h)
-    history_df = pd.concat(hist_frames, ignore_index=True) if hist_frames else pd.DataFrame()
-    print(f"[DB] Historical rows loaded: {len(history_df)}")
 
-    # ── Compute features ──────────────────────────────────────────────────────
-    feat_df = compute_features(today_df, history_df)
+    for backend in today_df["backend"].unique():
+        history = get_history_for_backend(
+            backend,
+            before_date=today,
+        )
+        if not history.empty:
+            hist_frames.append(history)
 
-    # ── Score qubits ──────────────────────────────────────────────────────────
-    ranked_df = score_qubits(feat_df, model)
+    history_df = (
+        pd.concat(hist_frames, ignore_index=True)
+        if hist_frames
+        else pd.DataFrame()
+    )
 
-    if ranked_df.empty:
-        print("No rankings to save (Day 1 — no history yet).")
-        print("Run again tomorrow to get predictions.")
-        return
+    print(
+        f"[DB] Prior-history rows loaded: {len(history_df):,}"
+    )
 
-    # ── Save rankings to DB ───────────────────────────────────────────────────
-    ranking_rows = []
-    for _, row in ranked_df.iterrows():
-        ranking_rows.append({
-            'backend': row['backend'], # Backend stored with qubit
-            'qubit': int(row['qubit']),
-            'snapshot_date': row['snapshot_date'],
-            'viability_score':round(float(row['viability_score']), 6),
-            'viability_rank': int(row['viability_rank']),
-            'label': int(row['label']),
-            'T1_us': round(float(row['T1_us']), 3),
-            'T2_us': round(float(row['T2_us']), 3),
-            'readout_error': round(float(row['readout_error']), 6),
-        })
+    # Defense-in-depth.
+    if not history_df.empty:
+        history_df["snapshot_date"] = pd.to_datetime(
+            history_df["snapshot_date"]
+        ).dt.date
 
-    inserted = insert_ranking_rows(ranking_rows)
-    print(f"[DB] Ranking rows inserted: {inserted}")
+        if (history_df["snapshot_date"] >= today).any():
+            raise RuntimeError(
+                "ABORT: current/future calibration leaked into history."
+            )
 
-    # ── Print top 5 per backend ───────────────────────────────────────────────
-    print()
-    print("TOP 5 VIABLE QUBITS PER BACKEND:")
-    print("-" * 60)
-    for backend in sorted(ranked_df['backend'].unique()): # Use discovered backends
-        sub = ranked_df[ranked_df['backend'] == backend].nsmallest(5, 'viability_rank')
-        print(f"\n{backend}:")
-        for _, r in sub.iterrows():
-            status = "✓" if r['label'] == 1 else "✗"
-            print(f" Rank {int(r['viability_rank']):3d} | Q{int(r['qubit']):3d} | "
-                  f"score={r['viability_score']:.3f} | "
-                  f"T1={r['T1_us']:.0f}μs T2={r['T2_us']:.0f}μs RE={r['readout_error']:.3f} {status}")
+    # ------------------------------------------------------------
+    # 3. Build features once.
+    # ------------------------------------------------------------
+    feat_df = compute_features(
+        today_df=today_df,
+        history_df=history_df,
+        prediction_date=today,
+    )
 
-    print()
-    print(f"Collection complete at {datetime.now().strftime('%H:%M:%S')}")
-    print("=" * 60)
+    n_predictable = int(feat_df["can_predict"].sum())
+    print(f"[FEATURES] Predictable qubits: {n_predictable:,}")
+
+    # ------------------------------------------------------------
+    # 4. Score ALL THREE models using the SAME feature dataframe.
+    # ------------------------------------------------------------
+    if n_predictable:
+        for entry in models:
+            ranked = score_with_model(
+                feat_df,
+                entry["model"],
+            )
+
+            ranking_rows = []
+            for _, row in ranked.iterrows():
+                ranking_rows.append(
+                    {
+                        "backend": row["backend"],
+                        "qubit": int(row["qubit"]),
+                        "snapshot_date": row["snapshot_date"],
+                        "viability_score": round(
+                            float(row["viability_score"]), 6
+                        ),
+                        "viability_rank": int(row["viability_rank"]),
+                        "label": int(row["label"]),
+                        "T1_us": round(float(row["T1_us"]), 3),
+                        "T2_us": round(float(row["T2_us"]), 3),
+                        "readout_error": round(
+                            float(row["readout_error"]), 6
+                        ),
+                    }
+                )
+
+            inserted = insert_ranking_rows(
+                ranking_rows,
+                model_name=entry["model_name"],
+            )
+
+            print(
+                f"[DB] {entry['model_name']} "
+                f"({entry['algorithm']}): "
+                f"{inserted:,} ranking rows inserted."
+            )
+    else:
+        print(
+            "[PREDICTION] No qubit has prior history. "
+            "Predictions skipped."
+        )
+
+    # ------------------------------------------------------------
+    # 5. Only AFTER prediction, persist today's calibration.
+    # ------------------------------------------------------------
+    inserted = insert_calibration_rows(
+        today_df.to_dict("records")
+    )
+
+    print(
+        f"[DB] Today's calibration rows inserted: {inserted:,}"
+    )
+
+    print("=" * 72)
+    print("COLLECTION COMPLETE")
+    print("=" * 72)
 
 
 if __name__ == "__main__":

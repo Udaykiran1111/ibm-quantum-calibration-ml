@@ -1,25 +1,75 @@
-# Secrets
+# ============================================================
+# SECRETS
+# ============================================================
+
 .env
+.env.*
+!.env.example
 
-# Data files (not pushed - too large, IBM telemetry)
-data/*.csv
-*.csv
+.streamlit/secrets.toml
 
-# Model binary (not pushed - use git lfs if needed)
-#models/*.pkl
 
-# Python cache
+# ============================================================
+# PYTHON
+# ============================================================
+
 __pycache__/
-*.pyc
+**/__pycache__/
+
+*.py[cod]
 *.pyo
 
-# Jupyter checkpoints
+
+# ============================================================
+# JUPYTER
+# ============================================================
+
 .ipynb_checkpoints/
 **/.ipynb_checkpoints/
 
-# OS files
+
+# ============================================================
+# LOCAL / OS FILES
+# ============================================================
+
 .DS_Store
 Thumbs.db
 
-# Streamlit secrets (local)
-.streamlit/secrets.toml
+*.log
+hs_err_pid*.log
+
+
+# ============================================================
+# TELEMETRY / LOCAL DATA
+# ============================================================
+
+*.csv
+
+# Keep directory placeholders if needed
+!data/.gitkeep
+
+
+# ============================================================
+# TRAINING / NOTEBOOK MODEL COPIES
+# ============================================================
+
+# Training-generated model copies are not production artifacts.
+notebooks/models/*.pkl
+notebooks/models/*.joblib
+
+
+# ============================================================
+# LOCAL PYTHON ENVIRONMENTS
+# ============================================================
+
+.venv/
+venv/
+env/
+
+
+# ============================================================
+# TEMPORARY FILES
+# ============================================================
+
+*.tmp
+*.temp
