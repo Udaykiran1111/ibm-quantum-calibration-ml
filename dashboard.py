@@ -391,16 +391,8 @@ with tab4:
             use_container_width=True,
         )
 
-    st.markdown(
-        """
-        **Experimental rule:** Model C is not treated as an already-validated
-        future predictor merely because it has a high LOBO score. Its final
-        predictive performance is measured prospectively on observations
-        collected after August 11, 2026.
-        """
-    )
 
 st.divider()
 st.caption(
-    "QubitTelemetry • Three-model prospective IBM Quantum viability experiment"
+    " Uday Kiran "
 )
