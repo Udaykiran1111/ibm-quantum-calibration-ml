@@ -1,0 +1,84 @@
+{
+  "model_name": "Model_B",
+  "model_file": "model_b_7day.pkl",
+  "selected_algorithm": "RandomForest",
+  "selection_rule": "highest_mean_LOBO_AUC",
+  "training_start": "2026-07-13",
+  "training_end": "2026-07-19",
+  "calendar_days_in_window": 7,
+  "training_rows": 2330,
+  "backends": [
+    "ibm_fez",
+    "ibm_kingston",
+    "ibm_marrakesh"
+  ],
+  "n_features": 17,
+  "features": [
+    "hist_T1_mean",
+    "hist_T1_std",
+    "hist_T1_min",
+    "hist_T1_max",
+    "hist_T2_mean",
+    "hist_T2_std",
+    "hist_T2_min",
+    "hist_T2_max",
+    "hist_RE_mean",
+    "hist_RE_std",
+    "hist_RE_min",
+    "hist_RE_max",
+    "prev_T1",
+    "prev_T2",
+    "prev_RE",
+    "hist_coherence_product",
+    "hist_t2_t1_ratio"
+  ],
+  "label_thresholds": {
+    "T1_us": 100.0,
+    "T2_us": 50.0,
+    "readout_error": 0.05
+  },
+  "label_source": "current_session",
+  "feature_source": "prior_sessions_only_shift_expand",
+  "leakage_status": "NONE_VERIFIED_BY_AUDIT",
+  "model_parameters": {
+    "n_estimators": 200,
+    "max_depth": 8,
+    "random_state": 42,
+    "n_jobs": -1
+  },
+  "lobo_results": [
+    {
+      "Model": "RandomForest",
+      "Test_Backend": "ibm_fez",
+      "Train_Rows": 1555,
+      "Test_Rows": 775,
+      "AUC": 0.858364,
+      "Balanced_Accuracy": 0.762793,
+      "F1": 0.810753,
+      "MCC": 0.555806
+    },
+    {
+      "Model": "RandomForest",
+      "Test_Backend": "ibm_kingston",
+      "Train_Rows": 1555,
+      "Test_Rows": 775,
+      "AUC": 0.908938,
+      "Balanced_Accuracy": 0.833754,
+      "F1": 0.950119,
+      "MCC": 0.742036
+    },
+    {
+      "Model": "RandomForest",
+      "Test_Backend": "ibm_marrakesh",
+      "Train_Rows": 1550,
+      "Test_Rows": 780,
+      "AUC": 0.888476,
+      "Balanced_Accuracy": 0.806885,
+      "F1": 0.846983,
+      "MCC": 0.628883
+    }
+  ],
+  "lobo_mean_auc": 0.8852593968888612,
+  "lobo_min_auc": 0.8583644465855714,
+  "trained_on_date": "2026-08-12"
+}

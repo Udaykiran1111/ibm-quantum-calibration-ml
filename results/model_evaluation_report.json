@@ -1,0 +1,109 @@
+{
+  "current_test_window": {
+    "start": "2026-07-20",
+    "end": "2026-08-11"
+  },
+  "model_a_current_temporal": {
+    "model": "MODEL A \u2014 HISTORICAL",
+    "test_start": "2026-07-20",
+    "test_end": "2026-08-11",
+    "test_rows": 10718,
+    "test_calendar_dates": 23,
+    "AUC": 0.8506080489295036,
+    "BalancedAccuracy": 0.7517837609814242,
+    "F1": 0.8324370832437084,
+    "MCC": 0.5374569725874244,
+    "Accuracy": 0.7819555887292405,
+    "actual_viable_rate": 0.6020712819555887,
+    "predicted_viable_rate": 0.6991976114946818,
+    "confusion_matrix": [
+      [
+        2576,
+        1689
+      ],
+      [
+        648,
+        5805
+      ]
+    ],
+    "backend_results": [
+      {
+        "backend": "ibm_fez",
+        "rows": 3565,
+        "AUC": 0.826762891801934,
+        "BalAcc": 0.757769785307526,
+        "F1": 0.7976906422901131,
+        "MCC": 0.5368700176855825
+      },
+      {
+        "backend": "ibm_kingston",
+        "rows": 3565,
+        "AUC": 0.8990470781841484,
+        "BalAcc": 0.7870366557176133,
+        "F1": 0.8964485981308411,
+        "MCC": 0.5858183146764049
+      },
+      {
+        "backend": "ibm_marrakesh",
+        "rows": 3588,
+        "AUC": 0.8164493028883355,
+        "BalAcc": 0.7232628483799716,
+        "F1": 0.7878378378378378,
+        "MCC": 0.4848476275506208
+      }
+    ]
+  },
+  "model_b_current_temporal": {
+    "model": "MODEL B \u2014 7 DAY",
+    "test_start": "2026-07-20",
+    "test_end": "2026-08-11",
+    "test_rows": 10718,
+    "test_calendar_dates": 23,
+    "AUC": 0.8957031354319782,
+    "BalancedAccuracy": 0.8014808674282743,
+    "F1": 0.8663727686637277,
+    "MCC": 0.6375312248235082,
+    "Accuracy": 0.8274864713565964,
+    "actual_viable_rate": 0.6020712819555887,
+    "predicted_viable_rate": 0.6889345027057286,
+    "confusion_matrix": [
+      [
+        2875,
+        1390
+      ],
+      [
+        459,
+        5994
+      ]
+    ],
+    "backend_results": [
+      {
+        "backend": "ibm_fez",
+        "rows": 3565,
+        "AUC": 0.8455263199406874,
+        "BalAcc": 0.7731555534522739,
+        "F1": 0.8088306647258612,
+        "MCC": 0.5656256928550033
+      },
+      {
+        "backend": "ibm_kingston",
+        "rows": 3565,
+        "AUC": 0.9402841427615993,
+        "BalAcc": 0.8306948393388397,
+        "F1": 0.9395030608570399,
+        "MCC": 0.744750081109071
+      },
+      {
+        "backend": "ibm_marrakesh",
+        "rows": 3588,
+        "AUC": 0.8680995011810021,
+        "BalAcc": 0.7902676364795979,
+        "F1": 0.8257630377313145,
+        "MCC": 0.5962856940984791
+      }
+    ]
+  },
+  "model_c_current_temporal": null,
+  "model_c_status": "Not evaluated because current data does not contain observations after its training end date.",
+  "final_three_model_results": null
+}
