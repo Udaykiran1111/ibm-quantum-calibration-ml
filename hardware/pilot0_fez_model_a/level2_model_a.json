@@ -1,0 +1,18 @@
+{
+  "experiment": "Level 2 hardware pilot",
+  "backend": "ibm_fez",
+  "circuit": "3-qubit GHZ",
+  "shots": 256,
+  "model": "model_a",
+  "physical_qubits": [21, 22, 23],
+  "job_id": "da5itue1vhnc73fm4t90",
+  "transpiled_depth": 12,
+  "counts": {
+    "000": 128,
+    "111": 117,
+    "011": 8,
+    "100": 1,
+    "110": 2
+  },
+  "fidelity": 0.95703125
+}

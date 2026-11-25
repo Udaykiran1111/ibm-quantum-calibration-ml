@@ -1,0 +1,14 @@
+Training completed: 2026-08-11
+
+Model B: 2026-07-13 → 2026-07-19 | 2,330 rows | LOBO Mean AUC: 0.8853
+Model C: 2026-07-13 → 2026-08-11 | 13,048 rows | LOBO Mean AUC: 0.8838
+
+All three models ready:
+  models/qubit_model_v2.pkl  — Model A (Dec28-Jan02)
+  models/model_b_7day.pkl    — Model B (Jul13-Jul19)
+  models/model_c_30day.pkl   — Model C (Jul13-Aug11)
+
+Next:
+  1. Push all 3 pkl files to GitHub
+  2. collector.py will auto-detect and use all 3
+  3. Dashboard will show all 3 models

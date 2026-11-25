@@ -1,0 +1,56 @@
+{
+  "experiment": {
+    "backend": "ibm_fez",
+    "circuit": "3-qubit GHZ",
+    "shots": 256,
+    "model": "model_a",
+    "model_qubits": [
+      21,
+      22,
+      23
+    ],
+    "model_transpiled_depth": 12,
+    "random_control_count": 10
+  },
+  "model_a": {
+    "fidelity": 0.95703125
+  },
+  "random_controls": {
+    "mean": 0.94766125,
+    "median": 0.94921875,
+    "std": 0.019597906545654874,
+    "min": 0.921875,
+    "max": 0.9688,
+    "bootstrap_mean_95ci": [
+      0.9359425,
+      0.958999375
+    ]
+  },
+  "comparison": {
+    "absolute_improvement": 0.00936999999999999,
+    "relative_improvement_percent": 0.9887499356969581,
+    "model_empirical_percentile": 0.5,
+    "random_controls_below_model": 5,
+    "random_controls_equal_model": 0,
+    "standardized_difference": 0.47811229113537373
+  },
+  "depth_matched_analysis": {
+    "model_depth": 12,
+    "number_of_matching_random_controls": 6,
+    "random_mean": 0.9466145833333334,
+    "random_std": 0.01892281471310932,
+    "model_minus_random_mean": 0.01041666666666663
+  },
+  "interpretation": {
+    "pilot_direction": "Model A exceeded the random-control mean.",
+    "conclusion": "This is a pilot hardware comparison. There is one Model A hardware observation and 10 random controls. Therefore the result should not be described as statistically significant evidence of model superiority. It supports a preliminary directional comparison."
+  },
+  "limitations": [
+    "Only one Model A hardware execution was performed.",
+    "Random controls were executed once each.",
+    "The experiment used one backend.",
+    "The experiment used one circuit family.",
+    "The current model predicts individual-qubit viability rather than explicit two-qubit gate quality.",
+    "The result is a pilot comparison rather than a statistically powered validation."
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "experiment": "Level 2 hardware pilot",
+  "backend": "ibm_fez",
+  "shots": 256,
+  "model": "model_a",
+  "physical_qubits": [
+    99,
+    114,
+    115
+  ],
+  "result": {
+    "label": "RANDOM_CONTROL",
+    "backend": "ibm_fez",
+    "physical_qubits": [
+      99,
+      114,
+      115
+    ],
+    "shots": 256,
+    "job_id": "da5ivq6aa69c739ku3v0",
+    "counts": {
+      "000": 131,
+      "111": 117,
+      "001": 2,
+      "110": 4,
+      "100": 1,
+      "011": 1
+    },
+    "ghz_fidelity": 0.96875,
+    "transpiled_depth": 18,
+    "qpu_usage_seconds": null
+  }
+}

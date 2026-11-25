@@ -1,0 +1,73 @@
+{
+  "model_name": "Temporal_7day",
+  "model_file": "temporal_7day_final_sep6.pkl",
+  "window_days": 7,
+  "training_first_date": "2026-08-30",
+  "training_last_date": "2026-09-05",
+  "prediction_date": "2026-09-06",
+  "selected_algorithm": "RandomForest",
+  "training_rows": 3262,
+  "training_viable_rate": 0.624770079705702,
+  "features": [
+    "hist_T1_mean",
+    "hist_T1_std",
+    "hist_T1_min",
+    "hist_T1_max",
+    "hist_T2_mean",
+    "hist_T2_std",
+    "hist_T2_min",
+    "hist_T2_max",
+    "hist_RE_mean",
+    "hist_RE_std",
+    "hist_RE_min",
+    "hist_RE_max",
+    "prev_T1",
+    "prev_T2",
+    "prev_RE",
+    "hist_coherence_product",
+    "hist_t2_t1_ratio"
+  ],
+  "label_thresholds": {
+    "T1_us": 100.0,
+    "T2_us": 50.0,
+    "readout_error": 0.05
+  },
+  "feature_source": "prior_sessions_only_shift_expand",
+  "lobo_results": [
+    {
+      "Model": "RandomForest",
+      "Test_Backend": "ibm_fez",
+      "Train_Rows": 2177,
+      "Test_Rows": 1085,
+      "AUC": 0.853088,
+      "Accuracy": 0.791705,
+      "Balanced_Accuracy": 0.775968,
+      "F1": 0.83033,
+      "MCC": 0.584093
+    },
+    {
+      "Model": "RandomForest",
+      "Test_Backend": "ibm_kingston",
+      "Train_Rows": 2177,
+      "Test_Rows": 1085,
+      "AUC": 0.892262,
+      "Accuracy": 0.919816,
+      "Balanced_Accuracy": 0.845235,
+      "F1": 0.951206,
+      "MCC": 0.729317
+    },
+    {
+      "Model": "RandomForest",
+      "Test_Backend": "ibm_marrakesh",
+      "Train_Rows": 2170,
+      "Test_Rows": 1092,
+      "AUC": 0.865044,
+      "Accuracy": 0.762821,
+      "Balanced_Accuracy": 0.763133,
+      "F1": 0.797181,
+      "MCC": 0.559746
+    }
+  ],
+  "lobo_mean_auc": 0.8701310079838711,
+  "lobo_min_auc": 0.8530876048526386
+}

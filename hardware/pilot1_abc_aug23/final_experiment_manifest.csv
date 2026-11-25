@@ -1,0 +1,19 @@
+backend,group,qubits,snapshot_date
+ibm_fez,model_a,"[21, 22, 23]",2026-09-08
+ibm_fez,model_b,"[2, 3, 4]",2026-09-08
+ibm_fez,model_c,"[2, 3, 4]",2026-09-08
+ibm_fez,random_1,"[100, 101, 116]",2026-09-08
+ibm_fez,random_2,"[137, 147, 148]",2026-09-08
+ibm_fez,random_3,"[78, 89, 90]",2026-09-08
+ibm_marrakesh,model_a,"[10, 11, 12]",2026-09-08
+ibm_marrakesh,model_b,"[1, 2, 3]",2026-09-08
+ibm_marrakesh,model_c,"[5, 6, 7]",2026-09-08
+ibm_marrakesh,random_1,"[119, 133, 134]",2026-09-08
+ibm_marrakesh,random_2,"[23, 24, 25]",2026-09-08
+ibm_marrakesh,random_3,"[122, 123, 124]",2026-09-08
+ibm_kingston,model_a,"[152, 153, 154]",2026-09-08
+ibm_kingston,model_b,"[149, 150, 151]",2026-09-08
+ibm_kingston,model_c,"[149, 150, 151]",2026-09-08
+ibm_kingston,random_1,"[46, 47, 48]",2026-09-08
+ibm_kingston,random_2,"[8, 9, 10]",2026-09-08
+ibm_kingston,random_3,"[47, 48, 49]",2026-09-08

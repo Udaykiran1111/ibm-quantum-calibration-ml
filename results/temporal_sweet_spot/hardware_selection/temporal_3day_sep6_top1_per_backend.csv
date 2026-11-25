@@ -1,0 +1,4 @@
+model_name,window_days,prediction_date,backend,qubit,viability_score,viability_rank,label,T1_us,T2_us,readout_error,snapshot_date
+temporal_3day,3,2026-09-06,ibm_fez,2,0.971367378507013,1,0,54.4646,84.4745,0.00634766,2026-09-06
+temporal_3day,3,2026-09-06,ibm_kingston,50,0.9801927415007716,1,1,277.848,255.279,0.00463867,2026-09-06
+temporal_3day,3,2026-09-06,ibm_marrakesh,112,0.974935693140345,1,1,315.683,118.365,0.00439453,2026-09-06

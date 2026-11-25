@@ -1,0 +1,70 @@
+{
+  "model_name": "Model_C",
+  "model_file": "model_c_30day.pkl",
+  "model_type": "RandomForestClassifier",
+  "training_start": "2026-07-13",
+  "training_end": "2026-08-11",
+  "training_rows": 13048,
+  "n_features": 17,
+  "features": [
+    "hist_T1_mean",
+    "hist_T1_std",
+    "hist_T1_min",
+    "hist_T1_max",
+    "hist_T2_mean",
+    "hist_T2_std",
+    "hist_T2_min",
+    "hist_T2_max",
+    "hist_RE_mean",
+    "hist_RE_std",
+    "hist_RE_min",
+    "hist_RE_max",
+    "prev_T1",
+    "prev_T2",
+    "prev_RE",
+    "hist_coherence_product",
+    "hist_t2_t1_ratio"
+  ],
+  "label_thresholds": {
+    "T1_us": 100.0,
+    "T2_us": 50.0,
+    "RE": 0.05
+  },
+  "label_source": "current_session",
+  "feature_source": "prior_sessions_only_shift_expand",
+  "leakage_status": "NONE_VERIFIED_BY_AUDIT",
+  "rf_params": {
+    "n_estimators": 200,
+    "max_depth": 8,
+    "random_state": 42,
+    "n_jobs": -1
+  },
+  "lobo_results": [
+    {
+      "test_backend": "ibm_fez",
+      "AUC": 0.8476,
+      "BalAcc": 0.7771,
+      "MCC": 0.5827
+    },
+    {
+      "test_backend": "ibm_kingston",
+      "AUC": 0.934,
+      "BalAcc": 0.8363,
+      "MCC": 0.7454
+    },
+    {
+      "test_backend": "ibm_marrakesh",
+      "AUC": 0.8699,
+      "BalAcc": 0.7921,
+      "MCC": 0.5979
+    }
+  ],
+  "lobo_mean_auc": 0.8838,
+  "trained_on_date": "2026-08-11",
+  "backends": [
+    "ibm_fez",
+    "ibm_kingston",
+    "ibm_marrakesh"
+  ],
+  "n_training_days": 28
+}

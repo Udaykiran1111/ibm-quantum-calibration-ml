@@ -1,0 +1,4 @@
+Backend,AUC,Balanced_Accuracy,MCC,Viable_rate,Rows
+ibm_fez,0.8292,0.7602,0.5707,0.506,156
+ibm_torino,0.9159,0.8699,0.7574,0.564,133
+ibm_marrakesh,0.8487,0.789,0.6017,0.583,156

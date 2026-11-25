@@ -1,0 +1,3 @@
+backend,sweet_spot_circuit,sweet_spot_depth,random_mean_depth,random_median_depth,random_min_depth,random_max_depth,sweet_minus_random_mean_depth,fraction_controls_deeper_than_sweet,number_random_controls
+ibm_fez,0,12.0,12.6,12.0,12.0,18.0,-0.5999999999999996,0.1,10
+ibm_marrakesh,0,12.0,12.6,12.0,12.0,18.0,-0.5999999999999996,0.1,10

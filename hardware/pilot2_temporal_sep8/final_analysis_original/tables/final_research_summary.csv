@@ -1,0 +1,11 @@
+metric,value,unit
+Backends evaluated,2.0,backends
+Positive Sweet-Spot wins,2.0,of 2
+Mean absolute advantage,0.05917968749999997,GHZ fidelity
+Mean relative advantage,6.7241587097038416,%
+7-day mean LOBO AUC,0.870131,AUC
+30-day mean LOBO AUC,0.893915,AUC
+30-day AUC improvement,0.023784000000000027,AUC
+7-day ranking stability,0.440862,Jaccard
+30-day ranking stability,0.625967,Jaccard
+30-day stability improvement,0.18510500000000008,Jaccard

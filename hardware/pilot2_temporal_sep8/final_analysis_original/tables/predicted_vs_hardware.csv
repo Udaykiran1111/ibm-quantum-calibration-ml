@@ -1,0 +1,3 @@
+backend,sweet_spot_circuit,physical_qubits,predicted_mean_viability,sweet_fidelity,prediction_hardware_gap,absolute_prediction_hardware_gap,pearson_r_n3,spearman_r_n3
+ibm_fez,0,"[13, 14, 15]",0.956503,0.94140625,-0.015096749999999992,0.015096749999999992,-1.0,-0.9999999999999999
+ibm_marrakesh,0,"[132, 133, 134]",0.958027,0.9375,-0.020526999999999962,0.020526999999999962,-1.0,-0.9999999999999999

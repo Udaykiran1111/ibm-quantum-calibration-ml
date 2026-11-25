@@ -1,0 +1,430 @@
+[
+  {
+    "backend": "ibm_fez",
+    "group": "model_a",
+    "repeat": 1,
+    "qubits": [
+      21,
+      22,
+      23
+    ],
+    "shots": 256,
+    "job_id": "da5jhb6aa69c739kundg",
+    "transpiled_depth": 12,
+    "counts": {
+      "111": 121,
+      "011": 6,
+      "000": 124,
+      "100": 1,
+      "101": 2,
+      "110": 2
+    },
+    "fidelity": 0.95703125,
+    "snapshot_date": "2026-08-23"
+  },
+  {
+    "backend": "ibm_fez",
+    "group": "model_b",
+    "repeat": 1,
+    "qubits": [
+      21,
+      22,
+      23
+    ],
+    "shots": 256,
+    "job_id": "da5jhds3jnrc73ahcgk0",
+    "transpiled_depth": 12,
+    "counts": {
+      "000": 135,
+      "111": 114,
+      "100": 1,
+      "101": 1,
+      "011": 4,
+      "110": 1
+    },
+    "fidelity": 0.97265625,
+    "snapshot_date": "2026-08-23"
+  },
+  {
+    "backend": "ibm_fez",
+    "group": "model_c",
+    "repeat": 1,
+    "qubits": [
+      20,
+      21,
+      22
+    ],
+    "shots": 256,
+    "job_id": "da5jhgm1vhnc73fm5k0g",
+    "transpiled_depth": 12,
+    "counts": {
+      "000": 124,
+      "111": 119,
+      "110": 9,
+      "001": 1,
+      "011": 1,
+      "101": 1,
+      "010": 1
+    },
+    "fidelity": 0.94921875,
+    "snapshot_date": "2026-08-23"
+  },
+  {
+    "backend": "ibm_fez",
+    "group": "random_1",
+    "repeat": 1,
+    "qubits": [
+      100,
+      101,
+      116
+    ],
+    "shots": 256,
+    "job_id": "da5jhis3jnrc73ahcgt0",
+    "transpiled_depth": 12,
+    "counts": {
+      "000": 122,
+      "111": 102,
+      "110": 10,
+      "100": 5,
+      "011": 3,
+      "010": 3,
+      "001": 8,
+      "101": 3
+    },
+    "fidelity": 0.875,
+    "snapshot_date": "2026-08-23"
+  },
+  {
+    "backend": "ibm_fez",
+    "group": "random_2",
+    "repeat": 1,
+    "qubits": [
+      137,
+      147,
+      148
+    ],
+    "shots": 256,
+    "job_id": "da5jhleaa69c739kunsg",
+    "transpiled_depth": 12,
+    "counts": {
+      "111": 123,
+      "000": 113,
+      "100": 4,
+      "101": 2,
+      "001": 1,
+      "011": 6,
+      "110": 7
+    },
+    "fidelity": 0.921875,
+    "snapshot_date": "2026-08-23"
+  },
+  {
+    "backend": "ibm_fez",
+    "group": "random_3",
+    "repeat": 1,
+    "qubits": [
+      78,
+      89,
+      90
+    ],
+    "shots": 256,
+    "job_id": "da5jhnu1vhnc73fm5kb0",
+    "transpiled_depth": 12,
+    "counts": {
+      "111": 118,
+      "000": 124,
+      "001": 2,
+      "110": 6,
+      "100": 2,
+      "010": 1,
+      "011": 2,
+      "101": 1
+    },
+    "fidelity": 0.9453125,
+    "snapshot_date": "2026-08-23"
+  },
+  {
+    "backend": "ibm_marrakesh",
+    "group": "model_a",
+    "repeat": 1,
+    "qubits": [
+      132,
+      133,
+      134
+    ],
+    "shots": 256,
+    "job_id": "da5jhqm1vhnc73fm5kdg",
+    "transpiled_depth": 12,
+    "counts": {
+      "111": 112,
+      "000": 134,
+      "101": 4,
+      "001": 3,
+      "110": 2,
+      "010": 1
+    },
+    "fidelity": 0.9609375,
+    "snapshot_date": "2026-08-23"
+  },
+  {
+    "backend": "ibm_marrakesh",
+    "group": "model_b",
+    "repeat": 1,
+    "qubits": [
+      1,
+      2,
+      3
+    ],
+    "shots": 256,
+    "job_id": "da5jht3otlns739c0jlg",
+    "transpiled_depth": 12,
+    "counts": {
+      "000": 116,
+      "111": 132,
+      "101": 1,
+      "001": 4,
+      "110": 2,
+      "100": 1
+    },
+    "fidelity": 0.96875,
+    "snapshot_date": "2026-08-23"
+  },
+  {
+    "backend": "ibm_marrakesh",
+    "group": "model_c",
+    "repeat": 1,
+    "qubits": [
+      12,
+      13,
+      14
+    ],
+    "shots": 256,
+    "job_id": "da5jhvm1vhnc73fm5kkg",
+    "transpiled_depth": 12,
+    "counts": {
+      "000": 127,
+      "111": 117,
+      "011": 3,
+      "100": 2,
+      "110": 3,
+      "101": 3,
+      "001": 1
+    },
+    "fidelity": 0.953125,
+    "snapshot_date": "2026-08-23"
+  },
+  {
+    "backend": "ibm_marrakesh",
+    "group": "random_1",
+    "repeat": 1,
+    "qubits": [
+      119,
+      132,
+      133
+    ],
+    "shots": 256,
+    "job_id": "da5ji1rotlns739c0js0",
+    "transpiled_depth": 18,
+    "counts": {
+      "111": 116,
+      "001": 21,
+      "000": 96,
+      "110": 11,
+      "100": 4,
+      "010": 3,
+      "011": 5
+    },
+    "fidelity": 0.828125,
+    "snapshot_date": "2026-08-23"
+  },
+  {
+    "backend": "ibm_marrakesh",
+    "group": "random_2",
+    "repeat": 1,
+    "qubits": [
+      22,
+      23,
+      24
+    ],
+    "shots": 256,
+    "job_id": "da5ji443jnrc73ahchmg",
+    "transpiled_depth": 12,
+    "counts": {
+      "111": 115,
+      "001": 7,
+      "000": 108,
+      "110": 9,
+      "011": 5,
+      "100": 6,
+      "010": 3,
+      "101": 3
+    },
+    "fidelity": 0.87109375,
+    "snapshot_date": "2026-08-23"
+  },
+  {
+    "backend": "ibm_marrakesh",
+    "group": "random_3",
+    "repeat": 1,
+    "qubits": [
+      121,
+      122,
+      123
+    ],
+    "shots": 256,
+    "job_id": "da5ji6u1vhnc73fm5ktg",
+    "transpiled_depth": 12,
+    "counts": {
+      "110": 5,
+      "000": 137,
+      "111": 99,
+      "101": 1,
+      "001": 9,
+      "011": 5
+    },
+    "fidelity": 0.921875,
+    "snapshot_date": "2026-08-23"
+  },
+  {
+    "backend": "ibm_kingston",
+    "group": "model_a",
+    "repeat": 1,
+    "qubits": [
+      152,
+      153,
+      154
+    ],
+    "shots": 256,
+    "job_id": "da5ji9eaa69c739kuoo0",
+    "transpiled_depth": 12,
+    "counts": {
+      "000": 119,
+      "110": 5,
+      "111": 118,
+      "101": 6,
+      "001": 1,
+      "100": 2,
+      "010": 4,
+      "011": 1
+    },
+    "fidelity": 0.92578125,
+    "snapshot_date": "2026-08-23"
+  },
+  {
+    "backend": "ibm_kingston",
+    "group": "model_b",
+    "repeat": 1,
+    "qubits": [
+      149,
+      150,
+      151
+    ],
+    "shots": 256,
+    "job_id": "da5jvh6aa69c739kv6mg",
+    "transpiled_depth": 12,
+    "counts": {
+      "111": 112,
+      "000": 139,
+      "011": 4,
+      "100": 1
+    },
+    "fidelity": 0.98046875,
+    "snapshot_date": "2026-08-23"
+  },
+  {
+    "backend": "ibm_kingston",
+    "group": "model_c",
+    "repeat": 1,
+    "qubits": [
+      149,
+      150,
+      151
+    ],
+    "shots": 256,
+    "job_id": "da5jvms3jnrc73ahcvlg",
+    "transpiled_depth": 12,
+    "counts": {
+      "111": 115,
+      "000": 133,
+      "011": 2,
+      "110": 3,
+      "001": 1,
+      "100": 1,
+      "010": 1
+    },
+    "fidelity": 0.96875,
+    "snapshot_date": "2026-08-23"
+  },
+  {
+    "backend": "ibm_kingston",
+    "group": "random_1",
+    "repeat": 1,
+    "qubits": [
+      46,
+      47,
+      48
+    ],
+    "shots": 256,
+    "job_id": "da5jvqrotlns739c127g",
+    "transpiled_depth": 12,
+    "counts": {
+      "111": 126,
+      "000": 118,
+      "110": 4,
+      "101": 2,
+      "100": 4,
+      "011": 1,
+      "010": 1
+    },
+    "fidelity": 0.953125,
+    "snapshot_date": "2026-08-23"
+  },
+  {
+    "backend": "ibm_kingston",
+    "group": "random_2",
+    "repeat": 1,
+    "qubits": [
+      8,
+      9,
+      10
+    ],
+    "shots": 256,
+    "job_id": "da5jvu3otlns739c12ag",
+    "transpiled_depth": 12,
+    "counts": {
+      "000": 139,
+      "111": 111,
+      "010": 1,
+      "110": 2,
+      "101": 1,
+      "001": 1,
+      "100": 1
+    },
+    "fidelity": 0.9765625,
+    "snapshot_date": "2026-08-23"
+  },
+  {
+    "backend": "ibm_kingston",
+    "group": "random_3",
+    "repeat": 1,
+    "qubits": [
+      47,
+      48,
+      49
+    ],
+    "shots": 256,
+    "job_id": "da5k0161vhnc73fm639g",
+    "transpiled_depth": 12,
+    "counts": {
+      "111": 111,
+      "000": 127,
+      "110": 5,
+      "001": 1,
+      "100": 6,
+      "101": 1,
+      "011": 5
+    },
+    "fidelity": 0.9296875,
+    "snapshot_date": "2026-08-23"
+  }
+]

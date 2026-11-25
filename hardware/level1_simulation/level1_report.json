@@ -1,0 +1,37 @@
+{
+  "level": 1,
+  "experiment": "Bell state",
+  "shots": 2048,
+  "ideal": {
+    "counts": {
+      "11": 1027,
+      "00": 1021
+    },
+    "probabilities": {
+      "11": 0.50146484375,
+      "00": 0.49853515625
+    },
+    "p_00": 0.49853515625,
+    "p_11": 0.50146484375,
+    "forbidden_probability": 0.0,
+    "bell_success_probability": 1.0
+  },
+  "controlled_noisy": {
+    "counts": {
+      "00": 963,
+      "11": 950,
+      "01": 78,
+      "10": 57
+    },
+    "probabilities": {
+      "00": 0.47021484375,
+      "11": 0.4638671875,
+      "01": 0.0380859375,
+      "10": 0.02783203125
+    },
+    "p_00": 0.47021484375,
+    "p_11": 0.4638671875,
+    "forbidden_probability": 0.06591796875,
+    "bell_success_probability": 0.93408203125
+  }
+}

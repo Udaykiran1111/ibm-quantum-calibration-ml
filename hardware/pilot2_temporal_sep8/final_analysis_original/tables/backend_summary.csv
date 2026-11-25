@@ -1,0 +1,3 @@
+backend,sweet_spot_circuit,sweet_spot_fidelity,random_mean_fidelity,random_median_fidelity,absolute_advantage,relative_advantage,controls_beaten,controls_total,fraction_controls_beaten
+ibm_fez,0,0.94140625,0.884375,0.908203125,0.05703124999999998,0.0644876325088339,7,10,0.7
+ibm_marrakesh,0,0.9375,0.876171875,0.9140625,0.061328124999999956,0.06999554168524293,6,10,0.6
