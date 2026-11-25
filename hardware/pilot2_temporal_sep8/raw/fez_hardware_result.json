@@ -1,0 +1,178 @@
+[
+  {
+    "backend": "ibm_fez",
+    "job_id": "dafgfb5nj4cs73agbfo0",
+    "circuit_index": 0,
+    "counts": {
+      "011": 5,
+      "000": 131,
+      "111": 110,
+      "100": 6,
+      "110": 3,
+      "101": 1
+    },
+    "shots": 256,
+    "ghz_fidelity": 0.94140625
+  },
+  {
+    "backend": "ibm_fez",
+    "job_id": "dafgfb5nj4cs73agbfo0",
+    "circuit_index": 1,
+    "counts": {
+      "111": 79,
+      "100": 14,
+      "000": 128,
+      "011": 13,
+      "110": 13,
+      "001": 4,
+      "101": 5
+    },
+    "shots": 256,
+    "ghz_fidelity": 0.80859375
+  },
+  {
+    "backend": "ibm_fez",
+    "job_id": "dafgfb5nj4cs73agbfo0",
+    "circuit_index": 2,
+    "counts": {
+      "000": 101,
+      "111": 92,
+      "010": 13,
+      "100": 7,
+      "110": 17,
+      "001": 9,
+      "101": 14,
+      "011": 3
+    },
+    "shots": 256,
+    "ghz_fidelity": 0.75390625
+  },
+  {
+    "backend": "ibm_fez",
+    "job_id": "dafgfb5nj4cs73agbfo0",
+    "circuit_index": 3,
+    "counts": {
+      "111": 117,
+      "000": 125,
+      "100": 6,
+      "011": 3,
+      "001": 1,
+      "110": 3,
+      "101": 1
+    },
+    "shots": 256,
+    "ghz_fidelity": 0.9453125
+  },
+  {
+    "backend": "ibm_fez",
+    "job_id": "dafgfb5nj4cs73agbfo0",
+    "circuit_index": 4,
+    "counts": {
+      "111": 121,
+      "000": 129,
+      "011": 3,
+      "101": 1,
+      "110": 1,
+      "100": 1
+    },
+    "shots": 256,
+    "ghz_fidelity": 0.9765625
+  },
+  {
+    "backend": "ibm_fez",
+    "job_id": "dafgfb5nj4cs73agbfo0",
+    "circuit_index": 5,
+    "counts": {
+      "000": 107,
+      "111": 101,
+      "100": 17,
+      "011": 14,
+      "010": 3,
+      "001": 4,
+      "110": 6,
+      "101": 4
+    },
+    "shots": 256,
+    "ghz_fidelity": 0.8125
+  },
+  {
+    "backend": "ibm_fez",
+    "job_id": "dafgfb5nj4cs73agbfo0",
+    "circuit_index": 6,
+    "counts": {
+      "000": 113,
+      "111": 109,
+      "101": 4,
+      "110": 8,
+      "001": 14,
+      "011": 5,
+      "010": 2,
+      "100": 1
+    },
+    "shots": 256,
+    "ghz_fidelity": 0.8671875
+  },
+  {
+    "backend": "ibm_fez",
+    "job_id": "dafgfb5nj4cs73agbfo0",
+    "circuit_index": 7,
+    "counts": {
+      "111": 114,
+      "000": 127,
+      "011": 2,
+      "110": 3,
+      "001": 4,
+      "100": 4,
+      "101": 2
+    },
+    "shots": 256,
+    "ghz_fidelity": 0.94140625
+  },
+  {
+    "backend": "ibm_fez",
+    "job_id": "dafgfb5nj4cs73agbfo0",
+    "circuit_index": 8,
+    "counts": {
+      "111": 104,
+      "000": 131,
+      "011": 1,
+      "001": 7,
+      "110": 8,
+      "100": 3,
+      "101": 2
+    },
+    "shots": 256,
+    "ghz_fidelity": 0.91796875
+  },
+  {
+    "backend": "ibm_fez",
+    "job_id": "dafgfb5nj4cs73agbfo0",
+    "circuit_index": 9,
+    "counts": {
+      "001": 4,
+      "000": 122,
+      "111": 114,
+      "100": 5,
+      "110": 6,
+      "011": 4,
+      "101": 1
+    },
+    "shots": 256,
+    "ghz_fidelity": 0.921875
+  },
+  {
+    "backend": "ibm_fez",
+    "job_id": "dafgfb5nj4cs73agbfo0",
+    "circuit_index": 10,
+    "counts": {
+      "001": 10,
+      "111": 118,
+      "110": 12,
+      "000": 112,
+      "101": 1,
+      "011": 3
+    },
+    "shots": 256,
+    "ghz_fidelity": 0.8984375
+  }
+]

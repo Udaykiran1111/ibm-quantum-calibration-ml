@@ -1,0 +1,3 @@
+backend,sweet_depth,controls_same_depth,controls_different_depth,sweet_fidelity,same_depth_control_mean,different_depth_control_mean,all_control_mean
+ibm_fez,12,9,1,0.94140625,0.8780381944444444,0.94140625,0.884375
+ibm_marrakesh,12,9,1,0.9375,0.8689236111111112,0.94140625,0.876171875

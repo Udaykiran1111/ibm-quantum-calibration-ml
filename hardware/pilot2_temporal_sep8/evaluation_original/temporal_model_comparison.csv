@@ -1,0 +1,5 @@
+model_name,window_days,training_rows,training_viable_rate,lobo_mean_auc,lobo_min_auc,avg_top10_intersection,avg_top10_jaccard,auc_rank,stability_rank
+temporal_1day,1,466,0.624464,0.891779,0.870588,3.8889,0.246421,2,4
+temporal_3day,3,1398,0.623033,0.876596,0.864435,5.7778,0.42264,3,3
+temporal_7day,7,3262,0.62477,0.870131,0.853088,5.7778,0.440862,4,2
+temporal_30day,30,13980,0.605722,0.893915,0.864922,7.5556,0.625967,1,1

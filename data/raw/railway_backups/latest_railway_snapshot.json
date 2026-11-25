@@ -1,0 +1,83 @@
+{
+  "latest_snapshot_date": "2026-08-22",
+  "calibration": [
+    {
+      "backend": "ibm_fez",
+      "rows_count": 155,
+      "avg_T1_us": 123.43093486908944,
+      "avg_T2_us": 87.1473477209768,
+      "avg_readout_error": 0.017426915322580644
+    },
+    {
+      "backend": "ibm_kingston",
+      "rows_count": 155,
+      "avg_T1_us": 246.48640948572466,
+      "avg_T2_us": 165.89432728675104,
+      "avg_readout_error": 0.022364068800403227
+    },
+    {
+      "backend": "ibm_marrakesh",
+      "rows_count": 156,
+      "avg_T1_us": 148.99489863407916,
+      "avg_T2_us": 75.50070012227083,
+      "avg_readout_error": 0.035410563151041664
+    }
+  ],
+  "rankings": [
+    {
+      "model_name": "model_a",
+      "backend": "ibm_fez",
+      "rows_count": 155,
+      "avg_score": 0.5753411117580629
+    },
+    {
+      "model_name": "model_a",
+      "backend": "ibm_kingston",
+      "rows_count": 155,
+      "avg_score": 0.7181100271401867
+    },
+    {
+      "model_name": "model_a",
+      "backend": "ibm_marrakesh",
+      "rows_count": 156,
+      "avg_score": 0.6259793841506903
+    },
+    {
+      "model_name": "model_b",
+      "backend": "ibm_fez",
+      "rows_count": 155,
+      "avg_score": 0.5419695617145232
+    },
+    {
+      "model_name": "model_b",
+      "backend": "ibm_kingston",
+      "rows_count": 155,
+      "avg_score": 0.7290287416441471
+    },
+    {
+      "model_name": "model_b",
+      "backend": "ibm_marrakesh",
+      "rows_count": 156,
+      "avg_score": 0.5366391230356664
+    },
+    {
+      "model_name": "model_c",
+      "backend": "ibm_fez",
+      "rows_count": 155,
+      "avg_score": 0.5495649431096089
+    },
+    {
+      "model_name": "model_c",
+      "backend": "ibm_kingston",
+      "rows_count": 155,
+      "avg_score": 0.7334450911625379
+    },
+    {
+      "model_name": "model_c",
+      "backend": "ibm_marrakesh",
+      "rows_count": 156,
+      "avg_score": 0.535137610206267
+    }
+  ],
+  "read_only": true
+}

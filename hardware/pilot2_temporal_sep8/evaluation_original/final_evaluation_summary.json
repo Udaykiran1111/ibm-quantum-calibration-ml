@@ -1,0 +1,119 @@
+{
+  "experiment": "Temporal 30-day Sweet-Spot vs topology-valid random controls",
+  "prediction_date": "2026-09-06",
+  "shots_per_circuit": 256,
+  "circuits_per_backend": 11,
+  "primary_jobs": {
+    "ibm_fez": "dafgfb5nj4cs73agbfo0",
+    "ibm_marrakesh": "dafpe83dd5gc73da62o0",
+    "ibm_kingston": "dafpntd1ierc738nnmpg"
+  },
+  "kingston_replication_job": "dafgfgl1ierc738nbdd0",
+  "backend_summary": [
+    {
+      "backend": "ibm_fez",
+      "sweet_fidelity": 0.94140625,
+      "random_mean": 0.884375,
+      "random_median": 0.908203125,
+      "random_std": 0.07182025390882281,
+      "absolute_advantage": 0.05703124999999998,
+      "percent_advantage": 6.448763250883394,
+      "rank_1_best": 3,
+      "controls_beaten": 7,
+      "controls_total": 10,
+      "fraction_controls_beaten": 0.7,
+      "ties": 1,
+      "sweet_depth": 12.0,
+      "random_median_depth": 12.0,
+      "predicted_mean_viability": 0.9211304416488967
+    },
+    {
+      "backend": "ibm_marrakesh",
+      "sweet_fidelity": 0.9375,
+      "random_mean": 0.876171875,
+      "random_median": 0.9140625,
+      "random_std": 0.13250641301468152,
+      "absolute_advantage": 0.061328124999999956,
+      "percent_advantage": 6.999554168524291,
+      "rank_1_best": 5,
+      "controls_beaten": 6,
+      "controls_total": 10,
+      "fraction_controls_beaten": 0.6,
+      "ties": 0,
+      "sweet_depth": 12.0,
+      "random_median_depth": 12.0,
+      "predicted_mean_viability": 0.9270971906677378
+    }
+  ],
+  "temporal_model_comparison": [
+    {
+      "model_name": "temporal_1day",
+      "window_days": 1,
+      "training_rows": 466,
+      "training_viable_rate": 0.624464,
+      "lobo_mean_auc": 0.891779,
+      "lobo_min_auc": 0.870588,
+      "avg_top10_intersection": 3.8889,
+      "avg_top10_jaccard": 0.246421,
+      "auc_rank": 2,
+      "stability_rank": 4
+    },
+    {
+      "model_name": "temporal_3day",
+      "window_days": 3,
+      "training_rows": 1398,
+      "training_viable_rate": 0.623033,
+      "lobo_mean_auc": 0.876596,
+      "lobo_min_auc": 0.864435,
+      "avg_top10_intersection": 5.7778,
+      "avg_top10_jaccard": 0.42264,
+      "auc_rank": 3,
+      "stability_rank": 3
+    },
+    {
+      "model_name": "temporal_7day",
+      "window_days": 7,
+      "training_rows": 3262,
+      "training_viable_rate": 0.62477,
+      "lobo_mean_auc": 0.870131,
+      "lobo_min_auc": 0.853088,
+      "avg_top10_intersection": 5.7778,
+      "avg_top10_jaccard": 0.440862,
+      "auc_rank": 4,
+      "stability_rank": 2
+    },
+    {
+      "model_name": "temporal_30day",
+      "window_days": 30,
+      "training_rows": 13980,
+      "training_viable_rate": 0.605722,
+      "lobo_mean_auc": 0.893915,
+      "lobo_min_auc": 0.864922,
+      "avg_top10_intersection": 7.5556,
+      "avg_top10_jaccard": 0.625967,
+      "auc_rank": 1,
+      "stability_rank": 1
+    }
+  ],
+  "seven_vs_thirty_day": [
+    {
+      "metric": "LOBO mean AUC",
+      "7_day": 0.870131,
+      "30_day": 0.893915,
+      "30_minus_7": 0.023784000000000027
+    },
+    {
+      "metric": "LOBO minimum AUC",
+      "7_day": 0.853088,
+      "30_day": 0.864922,
+      "30_minus_7": 0.011834000000000011
+    },
+    {
+      "metric": "Top-10 Jaccard",
+      "7_day": 0.440862,
+      "30_day": 0.625967,
+      "30_minus_7": 0.18510500000000008
+    }
+  ],
+  "verdict": "FINAL HARDWARE VERDICT\n============================================================\nSweet-Spot beat the random-control mean on 2/2 independent backends.\nMean backend-level absolute advantage: 0.059180.\nMean backend-level percentage advantage: 6.72%.\nSweet-Spot ranks among the 11 measured circuits: [3, 5].\nRESULT: The hardware experiment provides consistent directional evidence that the model-selected Sweet-Spot outperformed the random controls.\nCAUTION: With only three independent backends and ten controls per backend, this is evidence of benefit, not definitive proof of universal superiority.\nSame-transpilation-depth sensitivity: Sweet-Spot advantage is positive on 2/2 backends.\nTemporal model selection: temporal_30day has the best held-out LOBO AUC and temporal_30day has the best ranking stability."
+}

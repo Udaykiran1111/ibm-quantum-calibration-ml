@@ -1,0 +1,478 @@
+{
+  "schema_version": 2,
+  "experiment": "sweet_spot_vs_random",
+  "level": 2,
+  "model": "temporal_30day",
+  "prediction_date": "2026-09-06",
+  "shots": 256,
+  "random_controls_per_backend": 10,
+  "backends": {
+    "ibm_fez": {
+      "job_id": "dafgfb5nj4cs73agbfo0",
+      "status": "DONE",
+      "submitted_at_utc": null,
+      "metadata": [
+        {
+          "circuit_index": 0,
+          "group": "sweet_spot",
+          "trial": 0,
+          "physical_qubits": [
+            13,
+            14,
+            15
+          ],
+          "model": "temporal_30day",
+          "mean_viability": 0.9211304416488968,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 1,
+          "group": "random_control",
+          "trial": 1,
+          "physical_qubits": [
+            63,
+            64,
+            65
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 2,
+          "group": "random_control",
+          "trial": 2,
+          "physical_qubits": [
+            82,
+            83,
+            96
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 3,
+          "group": "random_control",
+          "trial": 3,
+          "physical_qubits": [
+            109,
+            118,
+            129
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 4,
+          "group": "random_control",
+          "trial": 4,
+          "physical_qubits": [
+            104,
+            105,
+            106
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 5,
+          "group": "random_control",
+          "trial": 5,
+          "physical_qubits": [
+            100,
+            101,
+            102
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 6,
+          "group": "random_control",
+          "trial": 6,
+          "physical_qubits": [
+            60,
+            61,
+            62
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 7,
+          "group": "random_control",
+          "trial": 7,
+          "physical_qubits": [
+            91,
+            92,
+            98
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 18
+        },
+        {
+          "circuit_index": 8,
+          "group": "random_control",
+          "trial": 8,
+          "physical_qubits": [
+            24,
+            25,
+            26
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 9,
+          "group": "random_control",
+          "trial": 9,
+          "physical_qubits": [
+            67,
+            68,
+            69
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 10,
+          "group": "random_control",
+          "trial": 10,
+          "physical_qubits": [
+            55,
+            59,
+            75
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        }
+      ],
+      "result_file": "results\\sweet_spot_level2_ibm_fez_result.json",
+      "qpu_usage_seconds": 3.0,
+      "last_error": null,
+      "superseded_job_ids": [],
+      "updated_at_utc": "2026-09-08T05:03:30.092017+00:00"
+    },
+    "ibm_kingston": {
+      "job_id": "dafgfgl1ierc738nbdd0",
+      "status": "DONE",
+      "submitted_at_utc": null,
+      "metadata": [
+        {
+          "circuit_index": 0,
+          "group": "sweet_spot",
+          "trial": 0,
+          "physical_qubits": [
+            149,
+            150,
+            151
+          ],
+          "model": "temporal_30day",
+          "mean_viability": 0.9606234740730591,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 1,
+          "group": "random_control",
+          "trial": 1,
+          "physical_qubits": [
+            141,
+            142,
+            143
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 2,
+          "group": "random_control",
+          "trial": 2,
+          "physical_qubits": [
+            22,
+            23,
+            24
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 3,
+          "group": "random_control",
+          "trial": 3,
+          "physical_qubits": [
+            15,
+            19,
+            35
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 4,
+          "group": "random_control",
+          "trial": 4,
+          "physical_qubits": [
+            91,
+            98,
+            111
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 5,
+          "group": "random_control",
+          "trial": 5,
+          "physical_qubits": [
+            86,
+            87,
+            88
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 6,
+          "group": "random_control",
+          "trial": 6,
+          "physical_qubits": [
+            123,
+            124,
+            136
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 17
+        },
+        {
+          "circuit_index": 7,
+          "group": "random_control",
+          "trial": 7,
+          "physical_qubits": [
+            109,
+            118,
+            129
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 8,
+          "group": "random_control",
+          "trial": 8,
+          "physical_qubits": [
+            112,
+            113,
+            114
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 9,
+          "group": "random_control",
+          "trial": 9,
+          "physical_qubits": [
+            83,
+            84,
+            85
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 10,
+          "group": "random_control",
+          "trial": 10,
+          "physical_qubits": [
+            25,
+            37,
+            45
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        }
+      ],
+      "result_file": "results\\sweet_spot_level2_ibm_kingston_result.json",
+      "qpu_usage_seconds": 3.0,
+      "last_error": null,
+      "superseded_job_ids": [],
+      "updated_at_utc": "2026-09-09T04:16:07.123363+00:00"
+    },
+    "ibm_marrakesh": {
+      "job_id": "dafpe83dd5gc73da62o0",
+      "status": "DONE",
+      "submitted_at_utc": "2026-09-08T05:03:28.504460+00:00",
+      "metadata": [
+        {
+          "circuit_index": 0,
+          "group": "sweet_spot",
+          "trial": 0,
+          "physical_qubits": [
+            132,
+            133,
+            134
+          ],
+          "model": "temporal_30day",
+          "mean_viability": 0.9270971906677378,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 1,
+          "group": "random_control",
+          "trial": 1,
+          "physical_qubits": [
+            53,
+            54,
+            55
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 2,
+          "group": "random_control",
+          "trial": 2,
+          "physical_qubits": [
+            111,
+            112,
+            113
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 3,
+          "group": "random_control",
+          "trial": 3,
+          "physical_qubits": [
+            145,
+            146,
+            147
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 4,
+          "group": "random_control",
+          "trial": 4,
+          "physical_qubits": [
+            51,
+            58,
+            71
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 5,
+          "group": "random_control",
+          "trial": 5,
+          "physical_qubits": [
+            88,
+            89,
+            90
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 6,
+          "group": "random_control",
+          "trial": 6,
+          "physical_qubits": [
+            33,
+            34,
+            39
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 18
+        },
+        {
+          "circuit_index": 7,
+          "group": "random_control",
+          "trial": 7,
+          "physical_qubits": [
+            10,
+            11,
+            18
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 8,
+          "group": "random_control",
+          "trial": 8,
+          "physical_qubits": [
+            25,
+            37,
+            45
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 9,
+          "group": "random_control",
+          "trial": 9,
+          "physical_qubits": [
+            130,
+            131,
+            138
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        },
+        {
+          "circuit_index": 10,
+          "group": "random_control",
+          "trial": 10,
+          "physical_qubits": [
+            107,
+            108,
+            109
+          ],
+          "model": "random",
+          "mean_viability": null,
+          "transpiled_depth": 12
+        }
+      ],
+      "result_file": "results\\sweet_spot_level2_ibm_marrakesh_result.json",
+      "qpu_usage_seconds": 3.0,
+      "last_error": null,
+      "superseded_job_ids": [],
+      "updated_at_utc": "2026-09-09T04:16:08.857692+00:00"
+    }
+  },
+  "created_at_utc": "2026-09-08T05:03:16.509880+00:00",
+  "updated_at_utc": "2026-09-09T04:16:08.857720+00:00"
+}

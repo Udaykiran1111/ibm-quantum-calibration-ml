@@ -1,0 +1,7 @@
+Dataset,Backend,Viable_rate,Training_viable_rate,Difference,Days_before_training,N_qubits
+Dec06,ibm_fez,0.609,0.654,-0.045,25,156
+Dec06,ibm_torino,0.519,0.594,-0.075,25,133
+Dec06,ibm_marrakesh,0.635,0.63,0.004,25,156
+Dec07,ibm_fez,0.609,0.654,-0.045,24,156
+Dec07,ibm_torino,0.519,0.594,-0.075,24,133
+Dec07,ibm_marrakesh,0.635,0.63,0.004,24,156

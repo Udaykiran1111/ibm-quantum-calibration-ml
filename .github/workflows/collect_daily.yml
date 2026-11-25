@@ -1,0 +1,57 @@
+name: Daily collect and rank
+
+on:
+  schedule:
+    - cron: "0 6 * * *"      # 06:00 UTC = 11:30 IST
+  workflow_dispatch:
+
+permissions:
+  contents: write            # needed to commit the daily files
+
+concurrency:
+  group: qt-data
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      IBM_QUANTUM_TOKEN: ${{ secrets.IBM_QUANTUM_TOKEN }}
+      IBM_INSTANCE: ${{ secrets.IBM_INSTANCE }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Check secrets
+        run: |
+          test -n "$IBM_QUANTUM_TOKEN" || { echo "IBM_QUANTUM_TOKEN secret is missing"; exit 1; }
+
+      - name: Collect today's calibration
+        run: python src/collect_daily.py
+
+      - name: Rank qubits (Model B and Model C, history before today only)
+        run: python src/rank_daily.py
+
+      - name: Commit new files
+        if: always()
+        run: |
+          git config user.name  "qubittelemetry-bot"
+          git config user.email "qubittelemetry-bot@users.noreply.github.com"
+          git add data/daily predictions/daily
+          if git diff --cached --quiet; then
+            echo "Nothing new to commit."
+          else
+            git commit -m "data: daily snapshot $(date -u +%F)"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi

@@ -1,0 +1,3 @@
+backend,sweet_fidelity,random_mean,random_median,random_std,absolute_advantage,percent_advantage,rank_1_best,controls_beaten,controls_total,fraction_controls_beaten,ties,sweet_depth,random_median_depth,predicted_mean_viability
+ibm_fez,0.94140625,0.884375,0.908203125,0.07182025390882281,0.05703124999999998,6.448763250883394,3,7,10,0.7,1,12.0,12.0,0.9211304416488967
+ibm_marrakesh,0.9375,0.876171875,0.9140625,0.13250641301468152,0.061328124999999956,6.999554168524291,5,6,10,0.6,0,12.0,12.0,0.9270971906677378

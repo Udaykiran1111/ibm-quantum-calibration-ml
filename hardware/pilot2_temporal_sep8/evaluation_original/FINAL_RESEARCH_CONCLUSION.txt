@@ -1,0 +1,10 @@
+FINAL HARDWARE VERDICT
+============================================================
+Sweet-Spot beat the random-control mean on 2/2 independent backends.
+Mean backend-level absolute advantage: 0.059180.
+Mean backend-level percentage advantage: 6.72%.
+Sweet-Spot ranks among the 11 measured circuits: [3, 5].
+RESULT: The hardware experiment provides consistent directional evidence that the model-selected Sweet-Spot outperformed the random controls.
+CAUTION: With only three independent backends and ten controls per backend, this is evidence of benefit, not definitive proof of universal superiority.
+Same-transpilation-depth sensitivity: Sweet-Spot advantage is positive on 2/2 backends.
+Temporal model selection: temporal_30day has the best held-out LOBO AUC and temporal_30day has the best ranking stability.

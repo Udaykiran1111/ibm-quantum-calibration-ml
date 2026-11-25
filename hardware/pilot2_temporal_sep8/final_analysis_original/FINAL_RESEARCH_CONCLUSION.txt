@@ -1,0 +1,67 @@
+FINAL RESEARCH CONCLUSION
+================================================================================
+
+EXPERIMENT
+--------------------------------------------------------------------------------
+Objective:
+Evaluate whether the 30-day temporal qubit-telemetry model can identify a Sweet-Spot 3-qubit hardware chain with strong measured GHZ fidelity relative to random topology-valid control chains.
+
+Primary backends:
+ibm_fez, ibm_marrakesh, ibm_kingston
+
+Circuits per backend: 11
+
+Shots per circuit: 256
+
+
+TEMPORAL MODEL SELECTION
+--------------------------------------------------------------------------------
+7-day mean LOBO AUC : 0.870131
+7-day minimum LOBO AUC : 0.853088
+7-day Top-10 Jaccard : 0.440862
+
+30-day mean LOBO AUC : 0.893915
+30-day minimum LOBO AUC : 0.864922
+30-day Top-10 Jaccard : 0.625967
+
+30-day AUC improvement : +0.023784
+30-day ranking-stability improvement : +0.185105
+
+Conclusion: The 30-day temporal model was selected because it provided the strongest mean LOBO AUC and the highest ranking stability among the evaluated temporal windows.
+
+
+HARDWARE VALIDATION
+--------------------------------------------------------------------------------
+Backends evaluated : 2
+Positive Sweet-Spot backend comparisons : 2/2
+Negative backend comparisons : 0
+Mean absolute advantage : +0.059180
+Mean relative advantage : +6.72%
+
+ibm_fez:
+  Sweet-Spot GHZ fidelity : 0.941406
+  Random-control mean     : 0.884375
+  Absolute advantage      : +0.057031
+  Relative advantage      : +6.45%
+
+ibm_marrakesh:
+  Sweet-Spot GHZ fidelity : 0.937500
+  Random-control mean     : 0.876172
+  Absolute advantage      : +0.061328
+  Relative advantage      : +7.00%
+
+EXPERIMENTAL QUALIFICATION
+--------------------------------------------------------------------------------
+The hardware comparison is empirical and backend-specific. It should not be interpreted as proof of universal superiority.
+
+Transpilation depth is an important experimental confound. Some random-control circuits required deeper transpiled circuits than the Sweet-Spot circuit, which can independently reduce GHZ fidelity.
+
+The final hardware analysis excludes the old Kingston job from the primary experiment and uses the selected primary dataset.
+
+OVERALL CONCLUSION
+--------------------------------------------------------------------------------
+The completed evidence supports the 30-day temporal model as the preferred Sweet-Spot selection model. The model provides a reproducible telemetry-based mechanism for ranking candidate physical qubits and selecting topology-valid 3-qubit chains for hardware evaluation.
+
+The hardware experiment provides empirical evidence about whether the selected Sweet-Spot chain outperforms random controls on the evaluated IBM Quantum backends. The result must be interpreted together with transpilation depth and other hardware-level experimental factors.
+
+================================================================================

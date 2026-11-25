@@ -1,0 +1,7 @@
+Model,Test_Backend,Transfer,Train_Rows,Test_Rows,Train_Positive_Rate,Test_Positive_Rate,AUC,Balanced_Accuracy,F1,MCC
+XGBoost,ibm_fez,r1+r2 → r2,867,468,0.614,0.654,0.8747,0.8428,0.8925,0.6876
+XGBoost,ibm_torino,r2+r2 → r1,936,399,0.642,0.594,0.9435,0.9023,0.9195,0.803
+XGBoost,ibm_marrakesh,r1+r2 → r2,867,468,0.626,0.63,0.8939,0.8115,0.8878,0.6715
+RandomForest,ibm_fez,r1+r2 → r2,867,468,0.614,0.654,0.9178,0.8435,0.901,0.7029
+RandomForest,ibm_torino,r2+r2 → r1,936,399,0.642,0.594,0.9457,0.898,0.9149,0.7931
+RandomForest,ibm_marrakesh,r1+r2 → r2,867,468,0.626,0.63,0.8825,0.8146,0.8846,0.6647

@@ -1,0 +1,13 @@
+prediction_date,Window,Window_Days,Selected_Algorithm,Training_First_Date,Training_Last_Date,Training_Observed_Dates,Training_Rows,Prediction_Rows,Ranking_CSV
+2026-09-04,1day,1,RandomForest,2026-09-03,2026-09-03,1,466,466,D:\Downloads\uday projects\ibm_quantum\results\temporal_sweet_spot\temporal_1day_predictions_2026-09-04.csv
+2026-09-04,3day,3,RandomForest,2026-09-01,2026-09-03,3,1398,466,D:\Downloads\uday projects\ibm_quantum\results\temporal_sweet_spot\temporal_3day_predictions_2026-09-04.csv
+2026-09-04,7day,7,RandomForest,2026-08-28,2026-09-03,7,3262,466,D:\Downloads\uday projects\ibm_quantum\results\temporal_sweet_spot\temporal_7day_predictions_2026-09-04.csv
+2026-09-04,30day,30,RandomForest,2026-08-05,2026-09-03,30,13980,466,D:\Downloads\uday projects\ibm_quantum\results\temporal_sweet_spot\temporal_30day_predictions_2026-09-04.csv
+2026-09-05,1day,1,RandomForest,2026-09-04,2026-09-04,1,466,466,D:\Downloads\uday projects\ibm_quantum\results\temporal_sweet_spot\temporal_1day_predictions_2026-09-05.csv
+2026-09-05,3day,3,RandomForest,2026-09-02,2026-09-04,3,1398,466,D:\Downloads\uday projects\ibm_quantum\results\temporal_sweet_spot\temporal_3day_predictions_2026-09-05.csv
+2026-09-05,7day,7,RandomForest,2026-08-29,2026-09-04,7,3262,466,D:\Downloads\uday projects\ibm_quantum\results\temporal_sweet_spot\temporal_7day_predictions_2026-09-05.csv
+2026-09-05,30day,30,RandomForest,2026-08-06,2026-09-04,30,13980,466,D:\Downloads\uday projects\ibm_quantum\results\temporal_sweet_spot\temporal_30day_predictions_2026-09-05.csv
+2026-09-06,1day,1,RandomForest,2026-09-05,2026-09-05,1,466,466,D:\Downloads\uday projects\ibm_quantum\results\temporal_sweet_spot\temporal_1day_predictions_2026-09-06.csv
+2026-09-06,3day,3,RandomForest,2026-09-03,2026-09-05,3,1398,466,D:\Downloads\uday projects\ibm_quantum\results\temporal_sweet_spot\temporal_3day_predictions_2026-09-06.csv
+2026-09-06,7day,7,RandomForest,2026-08-30,2026-09-05,7,3262,466,D:\Downloads\uday projects\ibm_quantum\results\temporal_sweet_spot\temporal_7day_predictions_2026-09-06.csv
+2026-09-06,30day,30,RandomForest,2026-08-07,2026-09-05,30,13980,466,D:\Downloads\uday projects\ibm_quantum\results\temporal_sweet_spot\temporal_30day_predictions_2026-09-06.csv

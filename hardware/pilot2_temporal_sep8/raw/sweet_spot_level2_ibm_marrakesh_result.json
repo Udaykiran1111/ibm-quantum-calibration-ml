@@ -1,0 +1,300 @@
+{
+  "experiment": "sweet_spot_vs_random",
+  "level": 2,
+  "model": "temporal_30day",
+  "prediction_date": "2026-09-06",
+  "shots": 256,
+  "random_controls_per_backend": 10,
+  "backend": "ibm_marrakesh",
+  "job_id": "dafpe83dd5gc73da62o0",
+  "total_circuits": 11,
+  "qpu_usage_seconds": 3.0,
+  "results": [
+    {
+      "backend": "ibm_marrakesh",
+      "circuit_index": 0,
+      "group": "sweet_spot",
+      "trial": 0,
+      "model": "temporal_30day",
+      "physical_qubits": [
+        132,
+        133,
+        134
+      ],
+      "mean_viability": 0.9270971906677378,
+      "shots": 256,
+      "job_id": "dafpe83dd5gc73da62o0",
+      "counts": {
+        "111": 110,
+        "110": 8,
+        "000": 130,
+        "001": 4,
+        "101": 1,
+        "100": 2,
+        "011": 1
+      },
+      "ghz_fidelity": 0.9375,
+      "transpiled_depth": 12
+    },
+    {
+      "backend": "ibm_marrakesh",
+      "circuit_index": 1,
+      "group": "random_control",
+      "trial": 1,
+      "model": "random",
+      "physical_qubits": [
+        53,
+        54,
+        55
+      ],
+      "mean_viability": null,
+      "shots": 256,
+      "job_id": "dafpe83dd5gc73da62o0",
+      "counts": {
+        "000": 121,
+        "111": 116,
+        "100": 5,
+        "011": 1,
+        "101": 7,
+        "001": 4,
+        "110": 2
+      },
+      "ghz_fidelity": 0.92578125,
+      "transpiled_depth": 12
+    },
+    {
+      "backend": "ibm_marrakesh",
+      "circuit_index": 2,
+      "group": "random_control",
+      "trial": 2,
+      "model": "random",
+      "physical_qubits": [
+        111,
+        112,
+        113
+      ],
+      "mean_viability": null,
+      "shots": 256,
+      "job_id": "dafpe83dd5gc73da62o0",
+      "counts": {
+        "000": 120,
+        "111": 108,
+        "001": 2,
+        "011": 18,
+        "110": 4,
+        "100": 3,
+        "101": 1
+      },
+      "ghz_fidelity": 0.890625,
+      "transpiled_depth": 12
+    },
+    {
+      "backend": "ibm_marrakesh",
+      "circuit_index": 3,
+      "group": "random_control",
+      "trial": 3,
+      "model": "random",
+      "physical_qubits": [
+        145,
+        146,
+        147
+      ],
+      "mean_viability": null,
+      "shots": 256,
+      "job_id": "dafpe83dd5gc73da62o0",
+      "counts": {
+        "110": 3,
+        "000": 143,
+        "101": 2,
+        "111": 103,
+        "011": 1,
+        "001": 3,
+        "100": 1
+      },
+      "ghz_fidelity": 0.9609375,
+      "transpiled_depth": 12
+    },
+    {
+      "backend": "ibm_marrakesh",
+      "circuit_index": 4,
+      "group": "random_control",
+      "trial": 4,
+      "model": "random",
+      "physical_qubits": [
+        51,
+        58,
+        71
+      ],
+      "mean_viability": null,
+      "shots": 256,
+      "job_id": "dafpe83dd5gc73da62o0",
+      "counts": {
+        "000": 112,
+        "111": 131,
+        "001": 6,
+        "100": 1,
+        "110": 3,
+        "101": 1,
+        "011": 2
+      },
+      "ghz_fidelity": 0.94921875,
+      "transpiled_depth": 12
+    },
+    {
+      "backend": "ibm_marrakesh",
+      "circuit_index": 5,
+      "group": "random_control",
+      "trial": 5,
+      "model": "random",
+      "physical_qubits": [
+        88,
+        89,
+        90
+      ],
+      "mean_viability": null,
+      "shots": 256,
+      "job_id": "dafpe83dd5gc73da62o0",
+      "counts": {
+        "111": 113,
+        "000": 134,
+        "110": 3,
+        "011": 4,
+        "101": 1,
+        "001": 1
+      },
+      "ghz_fidelity": 0.96484375,
+      "transpiled_depth": 12
+    },
+    {
+      "backend": "ibm_marrakesh",
+      "circuit_index": 6,
+      "group": "random_control",
+      "trial": 6,
+      "model": "random",
+      "physical_qubits": [
+        33,
+        34,
+        39
+      ],
+      "mean_viability": null,
+      "shots": 256,
+      "job_id": "dafpe83dd5gc73da62o0",
+      "counts": {
+        "000": 128,
+        "111": 113,
+        "101": 3,
+        "001": 5,
+        "110": 2,
+        "100": 1,
+        "011": 3,
+        "010": 1
+      },
+      "ghz_fidelity": 0.94140625,
+      "transpiled_depth": 18
+    },
+    {
+      "backend": "ibm_marrakesh",
+      "circuit_index": 7,
+      "group": "random_control",
+      "trial": 7,
+      "model": "random",
+      "physical_qubits": [
+        10,
+        11,
+        18
+      ],
+      "mean_viability": null,
+      "shots": 256,
+      "job_id": "dafpe83dd5gc73da62o0",
+      "counts": {
+        "000": 122,
+        "101": 33,
+        "111": 84,
+        "001": 6,
+        "011": 7,
+        "100": 2,
+        "110": 2
+      },
+      "ghz_fidelity": 0.8046875,
+      "transpiled_depth": 12
+    },
+    {
+      "backend": "ibm_marrakesh",
+      "circuit_index": 8,
+      "group": "random_control",
+      "trial": 8,
+      "model": "random",
+      "physical_qubits": [
+        25,
+        37,
+        45
+      ],
+      "mean_viability": null,
+      "shots": 256,
+      "job_id": "dafpe83dd5gc73da62o0",
+      "counts": {
+        "000": 118,
+        "111": 113,
+        "011": 9,
+        "110": 9,
+        "010": 1,
+        "100": 4,
+        "001": 2
+      },
+      "ghz_fidelity": 0.90234375,
+      "transpiled_depth": 12
+    },
+    {
+      "backend": "ibm_marrakesh",
+      "circuit_index": 9,
+      "group": "random_control",
+      "trial": 9,
+      "model": "random",
+      "physical_qubits": [
+        130,
+        131,
+        138
+      ],
+      "mean_viability": null,
+      "shots": 256,
+      "job_id": "dafpe83dd5gc73da62o0",
+      "counts": {
+        "001": 51,
+        "000": 72,
+        "111": 62,
+        "110": 62,
+        "101": 3,
+        "100": 2,
+        "011": 3,
+        "010": 1
+      },
+      "ghz_fidelity": 0.5234375,
+      "transpiled_depth": 12
+    },
+    {
+      "backend": "ibm_marrakesh",
+      "circuit_index": 10,
+      "group": "random_control",
+      "trial": 10,
+      "model": "random",
+      "physical_qubits": [
+        107,
+        108,
+        109
+      ],
+      "mean_viability": null,
+      "shots": 256,
+      "job_id": "dafpe83dd5gc73da62o0",
+      "counts": {
+        "111": 123,
+        "000": 107,
+        "001": 16,
+        "100": 4,
+        "110": 4,
+        "101": 2
+      },
+      "ghz_fidelity": 0.8984375,
+      "transpiled_depth": 12
+    }
+  ]
+}

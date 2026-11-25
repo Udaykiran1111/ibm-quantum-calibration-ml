@@ -1,0 +1,300 @@
+{
+  "experiment": "sweet_spot_vs_random",
+  "level": 2,
+  "model": "temporal_30day",
+  "prediction_date": "2026-09-06",
+  "shots": 256,
+  "random_controls_per_backend": 10,
+  "backend": "ibm_fez",
+  "job_id": "dafgfb5nj4cs73agbfo0",
+  "total_circuits": 11,
+  "qpu_usage_seconds": 3.0,
+  "results": [
+    {
+      "backend": "ibm_fez",
+      "circuit_index": 0,
+      "group": "sweet_spot",
+      "trial": 0,
+      "model": "temporal_30day",
+      "physical_qubits": [
+        13,
+        14,
+        15
+      ],
+      "mean_viability": 0.9211304416488968,
+      "shots": 256,
+      "job_id": "dafgfb5nj4cs73agbfo0",
+      "counts": {
+        "011": 5,
+        "000": 131,
+        "111": 110,
+        "100": 6,
+        "110": 3,
+        "101": 1
+      },
+      "ghz_fidelity": 0.94140625,
+      "transpiled_depth": 12
+    },
+    {
+      "backend": "ibm_fez",
+      "circuit_index": 1,
+      "group": "random_control",
+      "trial": 1,
+      "model": "random",
+      "physical_qubits": [
+        63,
+        64,
+        65
+      ],
+      "mean_viability": null,
+      "shots": 256,
+      "job_id": "dafgfb5nj4cs73agbfo0",
+      "counts": {
+        "111": 79,
+        "100": 14,
+        "000": 128,
+        "011": 13,
+        "110": 13,
+        "001": 4,
+        "101": 5
+      },
+      "ghz_fidelity": 0.80859375,
+      "transpiled_depth": 12
+    },
+    {
+      "backend": "ibm_fez",
+      "circuit_index": 2,
+      "group": "random_control",
+      "trial": 2,
+      "model": "random",
+      "physical_qubits": [
+        82,
+        83,
+        96
+      ],
+      "mean_viability": null,
+      "shots": 256,
+      "job_id": "dafgfb5nj4cs73agbfo0",
+      "counts": {
+        "000": 101,
+        "111": 92,
+        "010": 13,
+        "100": 7,
+        "110": 17,
+        "001": 9,
+        "101": 14,
+        "011": 3
+      },
+      "ghz_fidelity": 0.75390625,
+      "transpiled_depth": 12
+    },
+    {
+      "backend": "ibm_fez",
+      "circuit_index": 3,
+      "group": "random_control",
+      "trial": 3,
+      "model": "random",
+      "physical_qubits": [
+        109,
+        118,
+        129
+      ],
+      "mean_viability": null,
+      "shots": 256,
+      "job_id": "dafgfb5nj4cs73agbfo0",
+      "counts": {
+        "111": 117,
+        "000": 125,
+        "100": 6,
+        "011": 3,
+        "001": 1,
+        "110": 3,
+        "101": 1
+      },
+      "ghz_fidelity": 0.9453125,
+      "transpiled_depth": 12
+    },
+    {
+      "backend": "ibm_fez",
+      "circuit_index": 4,
+      "group": "random_control",
+      "trial": 4,
+      "model": "random",
+      "physical_qubits": [
+        104,
+        105,
+        106
+      ],
+      "mean_viability": null,
+      "shots": 256,
+      "job_id": "dafgfb5nj4cs73agbfo0",
+      "counts": {
+        "111": 121,
+        "000": 129,
+        "011": 3,
+        "101": 1,
+        "110": 1,
+        "100": 1
+      },
+      "ghz_fidelity": 0.9765625,
+      "transpiled_depth": 12
+    },
+    {
+      "backend": "ibm_fez",
+      "circuit_index": 5,
+      "group": "random_control",
+      "trial": 5,
+      "model": "random",
+      "physical_qubits": [
+        100,
+        101,
+        102
+      ],
+      "mean_viability": null,
+      "shots": 256,
+      "job_id": "dafgfb5nj4cs73agbfo0",
+      "counts": {
+        "000": 107,
+        "111": 101,
+        "100": 17,
+        "011": 14,
+        "010": 3,
+        "001": 4,
+        "110": 6,
+        "101": 4
+      },
+      "ghz_fidelity": 0.8125,
+      "transpiled_depth": 12
+    },
+    {
+      "backend": "ibm_fez",
+      "circuit_index": 6,
+      "group": "random_control",
+      "trial": 6,
+      "model": "random",
+      "physical_qubits": [
+        60,
+        61,
+        62
+      ],
+      "mean_viability": null,
+      "shots": 256,
+      "job_id": "dafgfb5nj4cs73agbfo0",
+      "counts": {
+        "000": 113,
+        "111": 109,
+        "101": 4,
+        "110": 8,
+        "001": 14,
+        "011": 5,
+        "010": 2,
+        "100": 1
+      },
+      "ghz_fidelity": 0.8671875,
+      "transpiled_depth": 12
+    },
+    {
+      "backend": "ibm_fez",
+      "circuit_index": 7,
+      "group": "random_control",
+      "trial": 7,
+      "model": "random",
+      "physical_qubits": [
+        91,
+        92,
+        98
+      ],
+      "mean_viability": null,
+      "shots": 256,
+      "job_id": "dafgfb5nj4cs73agbfo0",
+      "counts": {
+        "111": 114,
+        "000": 127,
+        "011": 2,
+        "110": 3,
+        "001": 4,
+        "100": 4,
+        "101": 2
+      },
+      "ghz_fidelity": 0.94140625,
+      "transpiled_depth": 18
+    },
+    {
+      "backend": "ibm_fez",
+      "circuit_index": 8,
+      "group": "random_control",
+      "trial": 8,
+      "model": "random",
+      "physical_qubits": [
+        24,
+        25,
+        26
+      ],
+      "mean_viability": null,
+      "shots": 256,
+      "job_id": "dafgfb5nj4cs73agbfo0",
+      "counts": {
+        "111": 104,
+        "000": 131,
+        "011": 1,
+        "001": 7,
+        "110": 8,
+        "100": 3,
+        "101": 2
+      },
+      "ghz_fidelity": 0.91796875,
+      "transpiled_depth": 12
+    },
+    {
+      "backend": "ibm_fez",
+      "circuit_index": 9,
+      "group": "random_control",
+      "trial": 9,
+      "model": "random",
+      "physical_qubits": [
+        67,
+        68,
+        69
+      ],
+      "mean_viability": null,
+      "shots": 256,
+      "job_id": "dafgfb5nj4cs73agbfo0",
+      "counts": {
+        "001": 4,
+        "000": 122,
+        "111": 114,
+        "100": 5,
+        "110": 6,
+        "011": 4,
+        "101": 1
+      },
+      "ghz_fidelity": 0.921875,
+      "transpiled_depth": 12
+    },
+    {
+      "backend": "ibm_fez",
+      "circuit_index": 10,
+      "group": "random_control",
+      "trial": 10,
+      "model": "random",
+      "physical_qubits": [
+        55,
+        59,
+        75
+      ],
+      "mean_viability": null,
+      "shots": 256,
+      "job_id": "dafgfb5nj4cs73agbfo0",
+      "counts": {
+        "001": 10,
+        "111": 118,
+        "110": 12,
+        "000": 112,
+        "101": 1,
+        "011": 3
+      },
+      "ghz_fidelity": 0.8984375,
+      "transpiled_depth": 12
+    }
+  ]
+}
