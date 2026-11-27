@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-27",
+  "backends": {
+    "ibm_fez": {
+      "job_id": "dc4t3deq4uuc73a9edi0",
+      "submitted_utc": "2026-11-27 18:53:42",
+      "n_circuits": 15,
+      "shots": 1024,
+      "status_at_submit": "SUBMITTED"
+    },
+    "ibm_kingston": {
+      "job_id": "dc4t3duq4uuc73a9edj0",
+      "submitted_utc": "2026-11-27 18:53:44",
+      "n_circuits": 15,
+      "shots": 1024,
+      "status_at_submit": "SUBMITTED"
+    },
+    "ibm_marrakesh": {
+      "job_id": "dc4t3eeq4uuc73a9edlg",
+      "submitted_utc": "2026-11-27 18:53:45",
+      "n_circuits": 17,
+      "shots": 1024,
+      "status_at_submit": "SUBMITTED"
+    }
+  }
+}
