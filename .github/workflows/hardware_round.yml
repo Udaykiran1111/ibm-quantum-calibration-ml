@@ -1,0 +1,99 @@
+name: Hardware round
+
+# Manual only. Three modes:
+#   dry-run : build + transpile all circuits on the real backends, submit NOTHING (uses no QPU time)
+#   submit  : commit the circuit selection FIRST, then submit one job per backend
+#   collect : fetch finished jobs and commit the results
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "dry-run, submit or collect"
+        type: choice
+        options: [dry-run, submit, collect]
+        default: dry-run
+      date:
+        description: "Snapshot date YYYY-MM-DD (UTC). Leave empty for today."
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: qt-hardware
+  cancel-in-progress: false
+
+jobs:
+  hardware:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      IBM_QUANTUM_TOKEN: ${{ secrets.IBM_QUANTUM_TOKEN }}
+      IBM_INSTANCE: ${{ secrets.IBM_INSTANCE }}
+      MODE: ${{ inputs.mode }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Pick the date
+        run: |
+          D="${{ inputs.date }}"
+          if [ -z "$D" ]; then D="$(date -u +%F)"; fi
+          echo "DATE=$D" >> "$GITHUB_ENV"
+          echo "Date: $D   Mode: $MODE"
+
+      - name: Select circuits (write-once, no IBM access)
+        if: ${{ inputs.mode != 'collect' }}
+        run: python src/hardware_select.py --date "$DATE"
+
+      - name: Commit the selection BEFORE any hardware run
+        if: ${{ inputs.mode == 'submit' }}
+        run: |
+          git config user.name  "qubittelemetry-bot"
+          git config user.email "qubittelemetry-bot@users.noreply.github.com"
+          git add hardware/confirmatory_7day/rankings
+          if git diff --cached --quiet; then
+            echo "Selection already committed."
+          else
+            git commit -m "hardware: circuit selection $DATE (committed before submission)"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+
+      - name: Dry run
+        if: ${{ inputs.mode == 'dry-run' }}
+        run: python src/hardware_run.py dry-run --date "$DATE"
+
+      - name: Submit
+        if: ${{ inputs.mode == 'submit' }}
+        run: python src/hardware_run.py submit --date "$DATE"
+
+      - name: Collect
+        if: ${{ inputs.mode == 'collect' }}
+        run: python src/hardware_run.py collect --date "$DATE"
+
+      - name: Commit job IDs / results
+        if: ${{ always() && inputs.mode != 'dry-run' }}
+        run: |
+          git config user.name  "qubittelemetry-bot"
+          git config user.email "qubittelemetry-bot@users.noreply.github.com"
+          git add hardware/confirmatory_7day/raw
+          if git diff --cached --quiet; then
+            echo "Nothing new to commit."
+          else
+            git commit -m "hardware: $MODE $DATE"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
