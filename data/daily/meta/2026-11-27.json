@@ -1,0 +1,30 @@
+{
+  "snapshot_date": "2026-11-27",
+  "collected_at_utc": "2026-11-27 15:52:13",
+  "fake": false,
+  "qiskit_ibm_runtime": "0.52.1",
+  "backends": {
+    "ibm_fez": {
+      "ok": true,
+      "qubit_rows": 155,
+      "coupler_rows": 704,
+      "backend_ts": "2026-11-27 14:59:33+00:00"
+    },
+    "ibm_kingston": {
+      "ok": true,
+      "qubit_rows": 155,
+      "coupler_rows": 704,
+      "backend_ts": "2026-11-27 15:33:10+00:00"
+    },
+    "ibm_marrakesh": {
+      "ok": true,
+      "qubit_rows": 153,
+      "coupler_rows": 704,
+      "backend_ts": "2026-11-27 15:05:56+00:00"
+    }
+  },
+  "files": {
+    "calibration": "fa4b83e73749344a1ec891c3dd759b18bb7b0166e12dfd0c15c1ee969d40dcac",
+    "couplers": "125965c958a6fa5efa5f97a6cfffddb5adb0a785752ec7c6cd5be9b672255d38"
+  }
+}
