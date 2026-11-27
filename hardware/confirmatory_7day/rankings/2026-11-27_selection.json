@@ -1,0 +1,870 @@
+{
+  "target_date": "2026-11-27",
+  "created_utc": "2026-11-27 18:53:33",
+  "history_dates": [
+    "2026-11-25",
+    "2026-11-26"
+  ],
+  "shots": 1024,
+  "n_random": 11,
+  "script_sha256": "9362982ddbd6c2d62794d118d22bb1c31a183ece35a995a3d4f594adfc0e8f01",
+  "inputs_sha256": {
+    "calibration_today": "fa4b83e73749344a1ec891c3dd759b18bb7b0166e12dfd0c15c1ee969d40dcac",
+    "couplers_today": "125965c958a6fa5efa5f97a6cfffddb5adb0a785752ec7c6cd5be9b672255d38",
+    "ranking_model_b": "d7e38f9b30a58c24f328ccd42ad0cf7ad2f4b663e59d486cb7b964f5569f682f",
+    "ranking_model_c": "ff48d1cf82f6f66e82d96ccac704a2ebb86314977dec5277f5d2cf6b98391dcf"
+  },
+  "backends": {
+    "ibm_fez": {
+      "circuits": [
+        {
+          "qubits": [
+            142,
+            143,
+            144
+          ],
+          "roles": [
+            "model_b",
+            "model_c",
+            "baseline_today_errors"
+          ],
+          "scores": {
+            "model_b_mean_viability": 0.9143538860400441,
+            "model_c_mean_viability": 0.8972772536544072,
+            "today_error_score": 0.01708186624655994,
+            "viab_model_b": 0.9143538860400441,
+            "viab_model_c": 0.8972772536544072
+          },
+          "today_error_score": 0.01708186624655994,
+          "yesterday_error_score": 0.02649680550258418,
+          "circuit_id": "fez_00"
+        },
+        {
+          "qubits": [
+            22,
+            23,
+            24
+          ],
+          "roles": [
+            "baseline_yesterday_errors"
+          ],
+          "scores": {
+            "yesterday_error_score": 0.013465692007134655,
+            "viab_model_b": 0.8149672462269658,
+            "viab_model_c": 0.7795989672808014
+          },
+          "today_error_score": 0.019668536972303446,
+          "yesterday_error_score": 0.013465692007134655,
+          "circuit_id": "fez_01"
+        },
+        {
+          "qubits": [
+            122,
+            123,
+            124
+          ],
+          "roles": [
+            "baseline_history_viable"
+          ],
+          "scores": {
+            "history_viable_share": 1.0,
+            "viab_model_b": 0.5776623605210146,
+            "viab_model_c": 0.6343568597670407
+          },
+          "today_error_score": 0.018569094698323907,
+          "yesterday_error_score": 0.020895723073412725,
+          "circuit_id": "fez_02"
+        },
+        {
+          "qubits": [
+            7,
+            8,
+            9
+          ],
+          "roles": [
+            "random_01"
+          ],
+          "scores": {
+            "viab_model_b": 0.0410597257720741,
+            "viab_model_c": 0.04847091282406696
+          },
+          "today_error_score": 0.03192528511111015,
+          "yesterday_error_score": 0.03568183812564432,
+          "circuit_id": "fez_03"
+        },
+        {
+          "qubits": [
+            7,
+            17,
+            27
+          ],
+          "roles": [
+            "random_02"
+          ],
+          "scores": {
+            "viab_model_b": 0.5535753750235787,
+            "viab_model_c": 0.5757817367969564
+          },
+          "today_error_score": 0.05291168044119665,
+          "yesterday_error_score": 0.07069943108665946,
+          "circuit_id": "fez_04"
+        },
+        {
+          "qubits": [
+            11,
+            18,
+            31
+          ],
+          "roles": [
+            "random_03"
+          ],
+          "scores": {
+            "viab_model_b": 0.4712906314719724,
+            "viab_model_c": 0.45936514125890504
+          },
+          "today_error_score": 0.13883817860643075,
+          "yesterday_error_score": 0.1303815742212,
+          "circuit_id": "fez_05"
+        },
+        {
+          "qubits": [
+            34,
+            33,
+            39
+          ],
+          "roles": [
+            "random_04"
+          ],
+          "scores": {
+            "viab_model_b": 0.6266136266204291,
+            "viab_model_c": 0.6348754340244177
+          },
+          "today_error_score": 0.04453558973091229,
+          "yesterday_error_score": 0.04201635115226654,
+          "circuit_id": "fez_06"
+        },
+        {
+          "qubits": [
+            76,
+            81,
+            80
+          ],
+          "roles": [
+            "random_05"
+          ],
+          "scores": {
+            "viab_model_b": 0.43601399949228165,
+            "viab_model_c": 0.4168294410894761
+          },
+          "today_error_score": 0.11546872072863998,
+          "yesterday_error_score": 0.084457566331689,
+          "circuit_id": "fez_07"
+        },
+        {
+          "qubits": [
+            76,
+            81,
+            82
+          ],
+          "roles": [
+            "random_06"
+          ],
+          "scores": {
+            "viab_model_b": 0.1757772086744044,
+            "viab_model_c": 0.15107919459253719
+          },
+          "today_error_score": 0.1116785968753321,
+          "yesterday_error_score": 0.07669904329909394,
+          "circuit_id": "fez_08"
+        },
+        {
+          "qubits": [
+            83,
+            96,
+            103
+          ],
+          "roles": [
+            "random_07"
+          ],
+          "scores": {
+            "viab_model_b": 0.49387232197158143,
+            "viab_model_c": 0.486371106105288
+          },
+          "today_error_score": 0.28182619071486226,
+          "yesterday_error_score": 0.1543802336197308,
+          "circuit_id": "fez_09"
+        },
+        {
+          "qubits": [
+            125,
+            126,
+            127
+          ],
+          "roles": [
+            "random_08"
+          ],
+          "scores": {
+            "viab_model_b": 0.49959761312851675,
+            "viab_model_c": 0.448368703292679
+          },
+          "today_error_score": 0.09753916054104714,
+          "yesterday_error_score": 0.11312193130453982,
+          "circuit_id": "fez_10"
+        },
+        {
+          "qubits": [
+            126,
+            127,
+            128
+          ],
+          "roles": [
+            "random_09"
+          ],
+          "scores": {
+            "viab_model_b": 0.4955772282018549,
+            "viab_model_c": 0.43073651560642867
+          },
+          "today_error_score": 0.09943575721943396,
+          "yesterday_error_score": 0.11673387061741966,
+          "circuit_id": "fez_11"
+        },
+        {
+          "qubits": [
+            146,
+            147,
+            148
+          ],
+          "roles": [
+            "random_10"
+          ],
+          "scores": {
+            "viab_model_b": 0.33496165376588904,
+            "viab_model_c": 0.34010994545032586
+          },
+          "today_error_score": 0.2583422945143894,
+          "yesterday_error_score": 0.2823888801055242,
+          "circuit_id": "fez_12"
+        },
+        {
+          "qubits": [
+            150,
+            151,
+            152
+          ],
+          "roles": [
+            "random_11"
+          ],
+          "scores": {
+            "viab_model_b": 0.26426268923764823,
+            "viab_model_c": 0.1544600362737194
+          },
+          "today_error_score": 0.030124991699443188,
+          "yesterday_error_score": 0.03597859053482291,
+          "circuit_id": "fez_13"
+        },
+        {
+          "qubits": [
+            142,
+            143,
+            144
+          ],
+          "roles": [
+            "model_b_repeat"
+          ],
+          "scores": {
+            "viab_model_b": 0.9143538860400441,
+            "viab_model_c": 0.8972772536544072
+          },
+          "today_error_score": 0.01708186624655994,
+          "yesterday_error_score": 0.02649680550258418,
+          "circuit_id": "fez_14"
+        }
+      ],
+      "n_eligible_chains": 239,
+      "random_seed": 1518117054,
+      "models_missing": [
+        "model_a"
+      ],
+      "yesterday_date": "2026-11-26",
+      "shots": 1024
+    },
+    "ibm_kingston": {
+      "circuits": [
+        {
+          "qubits": [
+            47,
+            57,
+            67
+          ],
+          "roles": [
+            "model_b",
+            "model_c"
+          ],
+          "scores": {
+            "model_b_mean_viability": 0.9811280587591512,
+            "model_c_mean_viability": 0.9596983057621209,
+            "viab_model_b": 0.9811280587591512,
+            "viab_model_c": 0.9596983057621209
+          },
+          "today_error_score": 0.02641099309829137,
+          "yesterday_error_score": 0.028331892245228668,
+          "circuit_id": "kin_00"
+        },
+        {
+          "qubits": [
+            48,
+            49,
+            50
+          ],
+          "roles": [
+            "baseline_yesterday_errors",
+            "baseline_today_errors"
+          ],
+          "scores": {
+            "yesterday_error_score": 0.014262582346991931,
+            "today_error_score": 0.01232012930108009,
+            "viab_model_b": 0.6352274005587683,
+            "viab_model_c": 0.6444767902301783
+          },
+          "today_error_score": 0.01232012930108009,
+          "yesterday_error_score": 0.014262582346991931,
+          "circuit_id": "kin_01"
+        },
+        {
+          "qubits": [
+            57,
+            67,
+            68
+          ],
+          "roles": [
+            "baseline_history_viable"
+          ],
+          "scores": {
+            "history_viable_share": 1.0,
+            "viab_model_b": 0.9241088681291879,
+            "viab_model_c": 0.9126432855543509
+          },
+          "today_error_score": 0.019080177767575562,
+          "yesterday_error_score": 0.01734936866878012,
+          "circuit_id": "kin_02"
+        },
+        {
+          "qubits": [
+            11,
+            12,
+            13
+          ],
+          "roles": [
+            "random_01"
+          ],
+          "scores": {
+            "viab_model_b": 0.9044547812451124,
+            "viab_model_c": 0.939443662458299
+          },
+          "today_error_score": 0.06259926137415872,
+          "yesterday_error_score": 0.066354414917737,
+          "circuit_id": "kin_03"
+        },
+        {
+          "qubits": [
+            18,
+            31,
+            32
+          ],
+          "roles": [
+            "random_02"
+          ],
+          "scores": {
+            "viab_model_b": 0.6481392986405776,
+            "viab_model_c": 0.6667702411906978
+          },
+          "today_error_score": 0.05217616793353683,
+          "yesterday_error_score": 0.047529920705984025,
+          "circuit_id": "kin_04"
+        },
+        {
+          "qubits": [
+            19,
+            35,
+            34
+          ],
+          "roles": [
+            "random_03"
+          ],
+          "scores": {
+            "viab_model_b": 0.9670220727979141,
+            "viab_model_c": 0.9498710937257959
+          },
+          "today_error_score": 0.04495118947130877,
+          "yesterday_error_score": 0.055204530906247495,
+          "circuit_id": "kin_05"
+        },
+        {
+          "qubits": [
+            20,
+            21,
+            36
+          ],
+          "roles": [
+            "random_04"
+          ],
+          "scores": {
+            "viab_model_b": 0.9111393890471482,
+            "viab_model_c": 0.8839385529599898
+          },
+          "today_error_score": 0.02846787137299389,
+          "yesterday_error_score": 0.032042386868835454,
+          "circuit_id": "kin_06"
+        },
+        {
+          "qubits": [
+            42,
+            43,
+            56
+          ],
+          "roles": [
+            "random_05"
+          ],
+          "scores": {
+            "viab_model_b": 0.49104131784356336,
+            "viab_model_c": 0.5178701631742877
+          },
+          "today_error_score": 0.03706567550708195,
+          "yesterday_error_score": 0.04140245344051266,
+          "circuit_id": "kin_07"
+        },
+        {
+          "qubits": [
+            50,
+            51,
+            52
+          ],
+          "roles": [
+            "random_06"
+          ],
+          "scores": {
+            "viab_model_b": 0.8794226708287174,
+            "viab_model_c": 0.8838956453323679
+          },
+          "today_error_score": 0.02719188874409162,
+          "yesterday_error_score": 0.0598605317915655,
+          "circuit_id": "kin_08"
+        },
+        {
+          "qubits": [
+            54,
+            55,
+            59
+          ],
+          "roles": [
+            "random_07"
+          ],
+          "scores": {
+            "viab_model_b": 0.942927442511562,
+            "viab_model_c": 0.942603690745428
+          },
+          "today_error_score": 0.03614034247765335,
+          "yesterday_error_score": 0.03933570190058183,
+          "circuit_id": "kin_09"
+        },
+        {
+          "qubits": [
+            70,
+            71,
+            72
+          ],
+          "roles": [
+            "random_08"
+          ],
+          "scores": {
+            "viab_model_b": 0.9242508198968339,
+            "viab_model_c": 0.8847963858226672
+          },
+          "today_error_score": 0.06224387061836359,
+          "yesterday_error_score": 0.0662293840013938,
+          "circuit_id": "kin_10"
+        },
+        {
+          "qubits": [
+            84,
+            83,
+            96
+          ],
+          "roles": [
+            "random_09"
+          ],
+          "scores": {
+            "viab_model_b": 0.9151864676684539,
+            "viab_model_c": 0.9010267257501673
+          },
+          "today_error_score": 0.05366201757214903,
+          "yesterday_error_score": 0.06318613116267041,
+          "circuit_id": "kin_11"
+        },
+        {
+          "qubits": [
+            119,
+            133,
+            132
+          ],
+          "roles": [
+            "random_10"
+          ],
+          "scores": {
+            "viab_model_b": 0.9596991795589362,
+            "viab_model_c": 0.940414267769102
+          },
+          "today_error_score": 0.0634446952205232,
+          "yesterday_error_score": 0.08853959415475599,
+          "circuit_id": "kin_12"
+        },
+        {
+          "qubits": [
+            142,
+            143,
+            144
+          ],
+          "roles": [
+            "random_11"
+          ],
+          "scores": {
+            "viab_model_b": 0.6858239622873606,
+            "viab_model_c": 0.6616694217377849
+          },
+          "today_error_score": 0.042402274667526496,
+          "yesterday_error_score": 0.0549898576963635,
+          "circuit_id": "kin_13"
+        },
+        {
+          "qubits": [
+            47,
+            57,
+            67
+          ],
+          "roles": [
+            "model_b_repeat"
+          ],
+          "scores": {
+            "viab_model_b": 0.9811280587591512,
+            "viab_model_c": 0.9596983057621209
+          },
+          "today_error_score": 0.02641099309829137,
+          "yesterday_error_score": 0.028331892245228668,
+          "circuit_id": "kin_14"
+        }
+      ],
+      "n_eligible_chains": 240,
+      "random_seed": 2614750110,
+      "models_missing": [
+        "model_a"
+      ],
+      "yesterday_date": "2026-11-26",
+      "shots": 1024
+    },
+    "ibm_marrakesh": {
+      "circuits": [
+        {
+          "qubits": [
+            5,
+            6,
+            7
+          ],
+          "roles": [
+            "model_b"
+          ],
+          "scores": {
+            "model_b_mean_viability": 0.9578736555287781,
+            "viab_model_b": 0.9578736555287781,
+            "viab_model_c": 0.8989211802701406
+          },
+          "today_error_score": 0.05180266274573775,
+          "yesterday_error_score": 0.03221613410533489,
+          "circuit_id": "mar_00"
+        },
+        {
+          "qubits": [
+            91,
+            92,
+            93
+          ],
+          "roles": [
+            "model_c"
+          ],
+          "scores": {
+            "model_c_mean_viability": 0.9145193753917681,
+            "viab_model_b": 0.9360921290584022,
+            "viab_model_c": 0.9145193753917681
+          },
+          "today_error_score": 0.17457515369899076,
+          "yesterday_error_score": 0.05255625174205983,
+          "circuit_id": "mar_01"
+        },
+        {
+          "qubits": [
+            53,
+            54,
+            55
+          ],
+          "roles": [
+            "baseline_yesterday_errors"
+          ],
+          "scores": {
+            "yesterday_error_score": 0.018925223327158375,
+            "viab_model_b": 0.8177285048192867,
+            "viab_model_c": 0.8256667899586189
+          },
+          "today_error_score": 0.03224474443627412,
+          "yesterday_error_score": 0.018925223327158375,
+          "circuit_id": "mar_02"
+        },
+        {
+          "qubits": [
+            97,
+            107,
+            108
+          ],
+          "roles": [
+            "baseline_today_errors"
+          ],
+          "scores": {
+            "today_error_score": 0.023905744214259617,
+            "viab_model_b": 0.5722028173438253,
+            "viab_model_c": 0.5545749710789679
+          },
+          "today_error_score": 0.023905744214259617,
+          "yesterday_error_score": 0.028251703348974616,
+          "circuit_id": "mar_03"
+        },
+        {
+          "qubits": [
+            2,
+            3,
+            16
+          ],
+          "roles": [
+            "baseline_history_viable"
+          ],
+          "scores": {
+            "history_viable_share": 1.0,
+            "viab_model_b": 0.8482114543045974,
+            "viab_model_c": 0.8608514660113401
+          },
+          "today_error_score": 0.03617576731401814,
+          "yesterday_error_score": 0.02737628974388756,
+          "circuit_id": "mar_04"
+        },
+        {
+          "qubits": [
+            0,
+            1,
+            2
+          ],
+          "roles": [
+            "random_01"
+          ],
+          "scores": {
+            "viab_model_b": 0.45170995016573495,
+            "viab_model_c": 0.44587137817668393
+          },
+          "today_error_score": 0.19167148607848258,
+          "yesterday_error_score": 0.1175017115286559,
+          "circuit_id": "mar_05"
+        },
+        {
+          "qubits": [
+            6,
+            7,
+            17
+          ],
+          "roles": [
+            "random_02"
+          ],
+          "scores": {
+            "viab_model_b": 0.6311145422516447,
+            "viab_model_c": 0.5829154873714724
+          },
+          "today_error_score": 0.06520362357771178,
+          "yesterday_error_score": 0.04211896788510583,
+          "circuit_id": "mar_06"
+        },
+        {
+          "qubits": [
+            27,
+            28,
+            29
+          ],
+          "roles": [
+            "random_03"
+          ],
+          "scores": {
+            "viab_model_b": 0.5374670792387788,
+            "viab_model_c": 0.5259367858676525
+          },
+          "today_error_score": 0.082233932304277,
+          "yesterday_error_score": 0.07994633829193876,
+          "circuit_id": "mar_07"
+        },
+        {
+          "qubits": [
+            52,
+            53,
+            54
+          ],
+          "roles": [
+            "random_04"
+          ],
+          "scores": {
+            "viab_model_b": 0.678330018475659,
+            "viab_model_c": 0.6370500121580629
+          },
+          "today_error_score": 0.04576853300740408,
+          "yesterday_error_score": 0.042531427745713224,
+          "circuit_id": "mar_08"
+        },
+        {
+          "qubits": [
+            63,
+            64,
+            65
+          ],
+          "roles": [
+            "random_05"
+          ],
+          "scores": {
+            "viab_model_b": 0.4368181318385205,
+            "viab_model_c": 0.4589240051466046
+          },
+          "today_error_score": 0.0731677443077196,
+          "yesterday_error_score": 0.06373342605516913,
+          "circuit_id": "mar_09"
+        },
+        {
+          "qubits": [
+            73,
+            79,
+            93
+          ],
+          "roles": [
+            "random_06"
+          ],
+          "scores": {
+            "viab_model_b": 0.5477947459727767,
+            "viab_model_c": 0.5783759216083194
+          },
+          "today_error_score": 0.0928162345718927,
+          "yesterday_error_score": 0.09376037746368354,
+          "circuit_id": "mar_10"
+        },
+        {
+          "qubits": [
+            104,
+            105,
+            117
+          ],
+          "roles": [
+            "random_07"
+          ],
+          "scores": {
+            "viab_model_b": 0.5701632003630802,
+            "viab_model_c": 0.5910807650030511
+          },
+          "today_error_score": 0.07121265645589464,
+          "yesterday_error_score": 0.04309525650905563,
+          "circuit_id": "mar_11"
+        },
+        {
+          "qubits": [
+            124,
+            123,
+            136
+          ],
+          "roles": [
+            "random_08"
+          ],
+          "scores": {
+            "viab_model_b": 0.6708032292347123,
+            "viab_model_c": 0.7344255401444916
+          },
+          "today_error_score": 0.04627340270573868,
+          "yesterday_error_score": 0.04759405769863137,
+          "circuit_id": "mar_12"
+        },
+        {
+          "qubits": [
+            128,
+            127,
+            137
+          ],
+          "roles": [
+            "random_09"
+          ],
+          "scores": {
+            "viab_model_b": 0.3957401455019543,
+            "viab_model_c": 0.45351389510680057
+          },
+          "today_error_score": 0.06344906531901026,
+          "yesterday_error_score": 0.17109524490966987,
+          "circuit_id": "mar_13"
+        },
+        {
+          "qubits": [
+            139,
+            155,
+            154
+          ],
+          "roles": [
+            "random_10"
+          ],
+          "scores": {
+            "viab_model_b": 0.4629750788603932,
+            "viab_model_c": 0.4568628381674351
+          },
+          "today_error_score": 0.047139341401389034,
+          "yesterday_error_score": 0.047451290117921596,
+          "circuit_id": "mar_14"
+        },
+        {
+          "qubits": [
+            153,
+            154,
+            155
+          ],
+          "roles": [
+            "random_11"
+          ],
+          "scores": {
+            "viab_model_b": 0.5103083792138366,
+            "viab_model_c": 0.48954597558235186
+          },
+          "today_error_score": 0.05219938184053077,
+          "yesterday_error_score": 0.049987009814010025,
+          "circuit_id": "mar_15"
+        },
+        {
+          "qubits": [
+            5,
+            6,
+            7
+          ],
+          "roles": [
+            "model_b_repeat"
+          ],
+          "scores": {
+            "viab_model_b": 0.9578736555287781,
+            "viab_model_c": 0.8989211802701406
+          },
+          "today_error_score": 0.05180266274573775,
+          "yesterday_error_score": 0.03221613410533489,
+          "circuit_id": "mar_16"
+        }
+      ],
+      "n_eligible_chains": 230,
+      "random_seed": 645115576,
+      "models_missing": [
+        "model_a"
+      ],
+      "yesterday_date": "2026-11-26",
+      "shots": 1024
+    }
+  }
+}
